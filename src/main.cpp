@@ -1,6 +1,10 @@
 #include <iostream>
 
-int main(int argc, char *argv[])
-{
-	std::cout << "Hello world!" << std::endl;
+int main(int argc, char *argv[]){
+
+
+	// Faire une boucle et appeler le code GBFS
+
+
+	return 0;
 }
