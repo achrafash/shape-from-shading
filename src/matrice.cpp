@@ -211,7 +211,7 @@ Vecteur<double> Matrice::operator*(const Vecteur<double> &V) const
 	return temp;
 };
 
-Matrice Matrice::operator*(const double nb) const
+Matrice Matrice::operator*(const double nb)
 {
 	Matrice tmp(n, m);
 	for (int i = 0; i < n; i++)

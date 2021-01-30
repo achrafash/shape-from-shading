@@ -1,4 +1,4 @@
-#include "lbfgs.hpp"
+#include "include/lbfgs.hpp"
 #include <cmath>
 
 
@@ -31,14 +31,41 @@ double fonctionnelle(const Matrice& image,const Matrice& p, const Matrice& q){
 // Ce code calcul le gradient de la fonctionnelle e 
 // Nous allons calculer les gradients de chaque fonctionnelle puis on fera la somme
 
+Matrice grad_fonctionnelle(const Matrice& image, const Matrice& p, const Matrice& q){
+    
+    int n_ligne = image.n;
+    int n_colonne = image.m;
+    // Matrice result(2*n_ligne,n_colonne);
+    Matrice e1(2*n_ligne,n_colonne);
+    Matrice e2(2*n_ligne,n_colonne);
+    Matrice e3(2*n_ligne,n_colonne);
 
+    for(int i=1;i<=n_ligne;i++){
+        for(int j=1;j<=n_colonne;j++){
 
-// A REVOIR
+            e1(i,j) = 2 * 255 * (image(i,j)*sqrt(1+pow(p(i,j),2)+pow(q(i,j),2))-255)*(p(i,j)/pow(1+pow(p(i,j),2)+pow(q(i,j),2),2));
+            e2(i,j) = 0; // calcul à faire
+            e3(i,j) = 0;
+        }
+    }
 
+    for(int i=n_ligne+1;i<=2*n_ligne;i++){
+        for(int j=n_ligne+1;j<=2*n_ligne;j++){
 
+            e1(i,j) = 2 * 255 * (image(i,j)*sqrt(1+pow(p(i,j),2)+pow(q(i,j),2))-255)*(q(i,j)/pow(1+pow(p(i,j),2)+pow(q(i,j),2),2));
+            e2(i,j) = 0; // calcul à faire
+            e3(i,j) = 0;
+        }
+    }
+    e1*=delta*delta;
+    e2*=lambda_int;
+    e3*=lambda_csmo;
 
-// Ce code calcul le gradient de la fonctionnelle discrétisée pour retrouver la hauteur
-// Nous allons calculer les gradients de chaque fonctionnelle puis on fera la somme
+    // coder l'opérateur + pour return delta*delta*e1+lambda_int*e2+...
+
+    return e1+e2+e3;
+
+}
 
 
 // Ce code calcul la fonctionnelle hauteur
@@ -56,6 +83,9 @@ double fonctionnelle_hauteur(const Matrice& h, const Matrice& p, const Matrice& 
     }
 
     return result;
-
-
 }
+
+// Ce code calcul le gradient de la fonctionnelle discrétisée pour retrouver la hauteur
+// Nous allons calculer les gradients de chaque fonctionnelle puis on fera la somme
+
+
