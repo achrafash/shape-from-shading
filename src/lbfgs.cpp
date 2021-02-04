@@ -89,3 +89,35 @@ double fonctionnelle_hauteur(const Matrice& h, const Matrice& p, const Matrice& 
 // Nous allons calculer les gradients de chaque fonctionnelle puis on fera la somme
 
 
+ 
+// Méthode BFGS
+
+Matrice BFGS(const Matrice& Image){
+
+    int n = Image.n;
+    int m = Image.m;
+    Matrice p(n,m);
+    Matrice q(n,m);
+
+    Vecteur<Vecteur<double>> s(m); // vecteur de vecteur de s allant de k-1 à k-m
+    Vecteur<Vecteur<double>> y(m); 
+
+    int k = 0;
+    bool finish = false;
+    while(k<i_max && finish == false){
+
+        // Calcul du gradient de la fonctionnelle
+        
+        // Calcul de gamma et de Ho_k
+
+        // Calcul de la direction de descente H_k * grad(e) 
+
+        
+
+
+    }
+
+
+
+}
+
