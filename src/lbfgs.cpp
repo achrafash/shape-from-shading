@@ -105,16 +105,37 @@ Matrice BFGS(const Matrice& Image){
     int k = 0;
     bool finish = false;
     while(k<i_max && finish == false){
-
-        // Calcul du gradient de la fonctionnelle
+        // prendre m = min(m,k)
         
+        // Calcul du gradient de la fonctionnelle
+        // g_k = gradient_fonctionnelle
+        // q = gradient_fonctionnelle
+        // s_k = x_k+1 - x_k;
+        // y_k = g_k+1 - g_k;
+        /*
+        
+        for(int i=k-1;i>k-m;i--){
+            alpha_i = rho_i*s_i*q;
+            q = q-alpha_i * y_i;
+        }
+        gamma_k = s_k-1*y_k-1/(y_k-1*y_k-1);
+        H_k0 = gamma_k * Identite
+        z = H_k0 * gamma_k;
+
+        for(int i=k-m;i<k-1;i++){
+            beta_i = rho_i*y_i*z;
+            z = z+s_i*(alpha_i -beta_i);
+        }
+        z=-z; // z est la direction de descente d_k = -H_k*g_k
+
+        */
         // Calcul de gamma et de Ho_k
 
         // Calcul de la direction de descente H_k * grad(e) 
 
         
 
-
+        k++;
     }
 
 

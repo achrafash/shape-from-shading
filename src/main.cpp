@@ -15,5 +15,8 @@ int main(int argc, char *argv[]){
 
 	Matrice m = image_to_matrice("lib/dragon.csv");
 
+	// Excellent maintenant, on peut travailler
+	
+	m.print();
 	return 0;
 }

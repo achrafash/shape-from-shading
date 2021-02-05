@@ -10,22 +10,33 @@ Matrice image_to_matrice(string nom_fichier){
     int n = 0;
     int m = 0;
     string line;
+    char virgule;
     if (image.is_open())
   {
-      image>>n;
-      image>>m;
-      printf("n = %d, m = %d",n,m);
+      image>>n>>virgule>>m;
+      // image>>m;
+      Matrice Image(n,m);
+      printf("n = %d, m = %d\n",n,m);
+      int i(1),j(1);
+      for(int i = 1 ;i<=n;i++){
+        for(int j = 1;j<=n;j++){
+          image>>Image(i,j)>>virgule;
+        }
+      }
+    /*
     while ( getline (image,line) )
     {
-      // std::cout << line << '\n';
+      image>>Image(i,j)>>virgule;
+      if(j==n)
+      j++;
     }
+    */
     image.close();
+    return Image;
   }
 
-  else cout << "Unable to open file"; 
-
-    Matrice Image(n,m);
-
-    return Image;
+  else{cout << "Unable to open file";
+  exit(0);
+  } 
 
 }

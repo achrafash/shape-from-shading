@@ -7,6 +7,6 @@
 #include<iostream>
 using namespace std;
 
-Matrice image_to_matrice(const char* nom_fichier);
+Matrice image_to_matrice(string nom_fichier);
 
 #endif
