@@ -4,6 +4,8 @@
 #include "matrice.hpp"
 #include <fstream>
 #include <string>
+#include<iostream>
+using namespace std;
 
 Matrice image_to_matrice(const char* nom_fichier);
 

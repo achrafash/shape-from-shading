@@ -1,5 +1,5 @@
-#include "matrice.hpp"
-#include "vecteur.hpp"
+#include "/home/othmane/shape/shape-from-shading/include/matrice.hpp"
+#include "/home/othmane/shape/shape-from-shading/include/vecteur.hpp"
 #include <cstdlib>
 #include <iostream>
 #include <string>
