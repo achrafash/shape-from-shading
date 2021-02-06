@@ -19,6 +19,9 @@ class Vecteur
     //Destructeur
     ~Vecteur();
 
+    // initialisation 
+    void init(int d, T x = T(0));
+
     //Opérateurs internes
     Vecteur<T> &operator=(const Vecteur<T> &);
     Vecteur<T> &operator*=(const T);
@@ -76,6 +79,17 @@ Vecteur<T>::~Vecteur()
     if (val != 0)
         delete[] val;
 };
+
+// initialisation 
+template <typename T>
+void Vecteur<T>::init(int d, T x ){
+    dim = d;
+    val = new T[dim];
+    for (int i = 0; i < dim; i++)
+    {
+        val[i] = x;
+    }
+}
 
 //Opérations internes
 template <typename T>
@@ -263,5 +277,17 @@ double Vecteur<T>::norm()
 {
     return sqrt(((*this) * (*this)));
 };
+template <typename T>
+Vecteur<T> operator*(const T a,const Vecteur<T>& V){
+
+    Vecteur<T> e = V;
+    e*= a;
+    return e;
+
+}
+template <typename T>
+Vecteur<T> operator*(const Vecteur<T>& V,const T a){
+}
+
 
 #endif

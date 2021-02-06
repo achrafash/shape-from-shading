@@ -359,6 +359,15 @@ double Matrice::norm()
 	return sqrt(norme);
 }
 
+Matrice operator*(const Matrice& M,const double nb){
+	Matrice e = M;
+	e*=nb;
+	return e;
+}
+Matrice operator*(const double nb,const Matrice& M){
+	return M*nb;
+}
+
 //Matrices carrées diagonales
 
 Matrice_diag::Matrice_diag()
@@ -454,3 +463,12 @@ Vecteur<double> Matrice_diag::operator*(const Vecteur<double> &V) const
 	}
 	return temp;
 };
+
+Matrice_diag operator*(const double nb,const Matrice_diag & M){
+	Matrice_diag tmp(M.n, 0);
+	for (int i = 0; i < M.n; i++)
+		tmp.val[i] = M.val[i] * nb;
+
+	return tmp;
+
+}

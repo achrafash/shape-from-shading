@@ -1,6 +1,6 @@
 #include <cstdlib>
 #include <cmath>
-#include "vecteur.hpp"
+#include "/home/othmane/shape/shape-from-shading/include/vecteur.hpp"
 
 //utilitaire de messages d'erreur
 void stop(const char * msg)
