@@ -73,7 +73,7 @@ Matrice grad_fonctionnelle(const Matrice& image,const Vecteur<double>& x){
     e3*=lambda_csmo;
 
     // coder l'opérateur + pour return delta*delta*e1+lambda_int*e2+...
-    cout << "oui_grad_fonctionnelle" << endl;
+    // cout << "oui_grad_fonctionnelle" << endl;
     return e1+e2+e3;
 
 }
@@ -157,8 +157,8 @@ Vecteur<double> BFGS(const Matrice& Image,Vecteur<double>& x){
     Vecteur<double> initial(x.dim, 1);
     vector<Vecteur<double>> y(m); 
     for(int i=0;i<m;i++){
-        s[i].init(x.dim,0.1);
-        y[i].init(x.dim,0.1);
+        s[i].init(x.dim,0.01);
+        y[i].init(x.dim,0.01);
     }
     Vecteur<double> alpha_k(m, 0);
     Vecteur<double> beta_k(m, 0);
@@ -175,7 +175,7 @@ Vecteur<double> BFGS(const Matrice& Image,Vecteur<double>& x){
         cout << "oui, norme du gradient : "<< g_k.norm() << endl;
         // Test de la condition
         if(g_k.norm()<epsilon){
-            return x_new;
+            return x;
         }
         Vecteur<double> q = g_k;
         // cout << "oui" << endl;
@@ -309,10 +309,11 @@ Vecteur<double> BFGS_hauteur(const Matrice& Image,Vecteur<double>& x){
 
         // Calcul du gradient de la fonctionnelle
         Vecteur<double> g_k = toVecteur(grad_fonctionnelle_hauteur(Image, x));
+        cout << "Itérations : " << k <<endl;
         cout << "Norme du Gradient : "<< g_k.norm()<<endl;
         // Test de la condition
         if(g_k.norm()<epsilon){
-            return x_new;
+            return x;
         }
         // cout << "oui 2"<<endl;
 
@@ -335,11 +336,16 @@ Vecteur<double> BFGS_hauteur(const Matrice& Image,Vecteur<double>& x){
             q = q-alpha_k(indice+1)*y[indice];
             // cout << "oui" << endl;
         }
-        cout << alpha_k;
-        
+        // cout << alpha_k;
+        // if(k==0){cout << q;}
+        // valeur nan si on ne mets pas k>0
+        if(k>0){
         gamma_k = (s[(k-1)%m]*y[(k-1)%m])/(y[(k-1)%m]*y[(k-1)%m]);
+        }
+        // cout << "Gamma_k" << gamma_k <<endl;
         Matrice_diag H_k0 = gamma_k*Identity;
         Vecteur<double> z = H_k0 * q;
+        // if(k==0){cout << z;}
 
         for(int i=k-m;i<=k-1;i++){
             if(i%m<0){
@@ -356,7 +362,7 @@ Vecteur<double> BFGS_hauteur(const Matrice& Image,Vecteur<double>& x){
         z*=-1; // z est la direction de descente d_k = -H_k*g_k
 
         // cout << "oui 5 "<<endl;
-        
+        // cout << z;
         // Calcul du pas alpha respectant la condition de Wolfe
         alpha = Wolfe_hauteur(Image,x_new,z, g_k);
         x_new = x + z * alpha;
@@ -365,9 +371,10 @@ Vecteur<double> BFGS_hauteur(const Matrice& Image,Vecteur<double>& x){
         s[k % m] = x_new- x;
         x = x_new;
         k++;
-        cout << "oui"<<endl;
+        // cout << "oui"<<endl;
 
     }
+    /*
     cout << "yes" <<endl;
     cout << "Norme du Gradient : "<< toVecteur(grad_fonctionnelle_hauteur(Image, x)).norm() <<endl;
     cout << "L'algorithme n'a pas convergé en " << i_max << " itérations " <<endl; 
@@ -381,5 +388,6 @@ Vecteur<double> BFGS_hauteur(const Matrice& Image,Vecteur<double>& x){
     cout << alpha_k ;
     cout << "ouai"<< endl;
     alpha_k.clear();
-
+    */
+   return x;
 }

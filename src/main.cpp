@@ -21,7 +21,7 @@ int main(int argc, char *argv[]){
 
 	// Excellent maintenant, on peut travailler
 
-	Vecteur<double> x0(2*Image.n*Image.m,0.1);
+	Vecteur<double> x0(2*Image.n*Image.m,0.5);
 
 	cout << " BFGS Algorithme " << endl;
 

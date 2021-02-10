@@ -9,7 +9,8 @@ const double lambda_csmo = 1;
 const double w1 = 1.0e-6;
 const double w2 = 1.0e-6;
 const double epsilon = 10e-6;
-const int i_max = 3;
+const int i_max = 500;
+const int i_max_Wolfe = 5;
 
 Vecteur<double> BFGS(const Matrice& Image,Vecteur<double>& x);
 Vecteur<double> BFGS_hauteur(const Matrice& Image,Vecteur<double>& x);
