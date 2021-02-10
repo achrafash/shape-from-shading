@@ -4,6 +4,8 @@
 #include "/home/othmane/shape/shape-from-shading/include/vecteur.hpp"
 #include "/home/othmane/shape/shape-from-shading/include/lbfgs.hpp"
 
+// g++ src/main.cpp src/conversion_image_matrice.cpp src/matrice.cpp src/vecteur.cpp src/lbfgs.cpp -o main.exe
+
 int main(int argc, char *argv[]){
 	
 	// charger une image, la convertir en fichier .csv et créer une matrice image et la remplir des niveaux de gris de l'image initiale.
@@ -19,7 +21,7 @@ int main(int argc, char *argv[]){
 
 	// Excellent maintenant, on peut travailler
 
-	Vecteur<double> x0(2*Image.n*Image.m,1);
+	Vecteur<double> x0(2*Image.n*Image.m,0.1);
 
 	cout << " BFGS Algorithme " << endl;
 
@@ -37,7 +39,7 @@ int main(int argc, char *argv[]){
 
 	Matrice result = h_final.toMatrice(Image.n,Image.m);
 
-
+	cout << "Fini" <<endl;
 
 	return 0;
 }

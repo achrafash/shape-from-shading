@@ -49,8 +49,11 @@ Matrice grad_fonctionnelle(const Matrice& image,const Vecteur<double>& x){
         for(int j=1;j<=n_colonne;j++){
 
             e1(i,j) = 2 * 255 * (image(i,j)*sqrt(1+pow(p(i,j),2)+pow(q(i,j),2))-255)*(p(i,j)/pow(1+pow(p(i,j),2)+pow(q(i,j),2),2));
-            e2(i,j) = 0; // calcul à faire
-            e3(i,j) = 0;
+            if (i != 1 && j != 1 && i != n_ligne && j != n_colonne)
+            {
+                e2(i, j) = 2 * p(i, j) - p(i, j - 1) - p(i, j + 1) - q(i, j) + q(i + 1, j) - q(i + 1, j - 1) + q(i, j - 1);
+                e3(i, j) = 4 * p(i, j) - p(i - 1, j) - p(i + 1, j) - p(i, j - 1) - p(i, j + 1);
+            }
         }
     }
 
@@ -58,8 +61,11 @@ Matrice grad_fonctionnelle(const Matrice& image,const Vecteur<double>& x){
         for(int j=1;j<=n_ligne;j++){
 
             e1(i,j) = 2 * 255 * (image(i-n_ligne,j)*sqrt(1+pow(p(i-n_ligne,j),2)+pow(q(i-n_ligne,j),2))-255)*(q(i-n_ligne,j)/pow(1+pow(p(i-n_ligne,j),2)+pow(q(i-n_ligne,j),2),2));
-            e2(i,j) = 0; // calcul à faire
-            e3(i,j) = 0;
+            if (i != n_ligne + 1 && j != 1 && i != 2 * n_ligne && j != n_ligne)
+            {
+                e2(i, j) = 2 * q(i - n_ligne, j) - q(i - 1 - n_ligne, j) - q(i + 1 - n_ligne, j) - p(i - n_ligne, j) + p(i - n_ligne, j + 1) - p(i - 1 - n_ligne, j + 1) + p(i - 1 - n_ligne, j);
+                e3(i, j) = 4 * q(i - n_ligne, j) - q(i - 1 - n_ligne, j) - q(i + 1 - n_ligne, j) - q(i - n_ligne, j - 1) - q(i - n_ligne, j + 1);
+            }
         }
     }
     e1*=delta*delta;
@@ -75,25 +81,23 @@ Matrice grad_fonctionnelle(const Matrice& image,const Vecteur<double>& x){
 
 // Ce code calcul la fonctionnelle hauteur
 
-double fonctionnelle_hauteur(const Matrice& h, const Vecteur<double>& x){
+double fonctionnelle_hauteur(const Matrice& x, const Vecteur<double>& h){
     double result = 0;
-    int n_ligne = h.n;
-    int n_colonne = h.m;
-
-    Matrice p = x(0, n_ligne * n_colonne - 1).toMatrice(n_ligne, n_colonne);
-    Matrice q = x(n_ligne * n_colonne, 2 * n_ligne * n_colonne - 1).toMatrice(n_ligne, n_colonne);
+    int n_ligne = x.n/2;
+    int n_colonne = x.m;
+    Matrice hauteur = h.toMatrice(n_ligne,n_colonne);
 
     for(int i=1;i<n_ligne;i++){
         for(int j=1;j<n_colonne;j++){
-               result += pow((h(i+1,j)-h(i,j)-delta*p(i,j)),2)+pow(h(i,j+1)-h(i,j)-delta*q(i,j),2);
+               result += pow((hauteur(i+1,j)-hauteur(i,j)-delta*x(i,j)),2)+pow(hauteur(i,j+1)-hauteur(i,j)-delta*x(i+n_ligne,j),2);
         }
     }
 
     return result;
 }
 
-// J'AI RECOPIÉ 
-Vecteur<double> grad_fonctionnelle_hauteur(const Matrice & Image, Vecteur<double> &h)
+// 
+Matrice grad_fonctionnelle_hauteur(const Matrice & Image, Vecteur<double> &h)
 {
 	int nb_l = Image.n / 2;
 	int nb_c = Image.m;
@@ -110,7 +114,8 @@ Vecteur<double> grad_fonctionnelle_hauteur(const Matrice & Image, Vecteur<double
 			}
 		}
 	}
-	return toVecteur(gradient * 2);
+    // cout << toVecteur(gradient);
+	return 2*gradient;
 }
 
 
@@ -128,7 +133,7 @@ double Wolfe(const Matrice& Image, Vecteur<double>& x, Vecteur<double>& z, Vecte
     double grad_e_pk = gradient*z;
     Vecteur<double> grad_e_new = toVecteur(grad_fonctionnelle(Image, x_new));
 
-    while(((e_new>e+w1*alpha*grad_e_pk || abs(grad_e_new*z))>w2*abs(grad_e_pk)) && (i<i_max)){
+    while(((e_new>e+w1*alpha*grad_e_pk || abs(grad_e_new*z))>w2*abs(grad_e_pk)) && (i<20)){
         i++;
         alpha /= 2;
         x_new = x + alpha * z;
@@ -149,31 +154,31 @@ Vecteur<double> BFGS(const Matrice& Image,Vecteur<double>& x){
     int m_colonne = Image.m;
     int m = 4;
     vector<Vecteur<double>> s(m); // vecteur de vecteur de s allant de k-1 à k-m
-    // Vecteur<double> initial(x.dim, 1);
+    Vecteur<double> initial(x.dim, 1);
     vector<Vecteur<double>> y(m); 
     for(int i=0;i<m;i++){
-        s[i].init(x.dim,1);
-        y[i].init(x.dim,1);
+        s[i].init(x.dim,0.1);
+        y[i].init(x.dim,0.1);
     }
     Vecteur<double> alpha_k(m, 0);
     Vecteur<double> beta_k(m, 0);
-    double gamma_k = 0;
+    double gamma_k = 1;
     double beta_i = 0;
     double alpha = 0;
     int k = 0;
     int indice = 0;
     while(k<i_max){
         // VOIR WIKIPEDIA POUR LE MODÈLE
-        cout << "oui" << endl;
+        // cout << "oui" << endl;
         // Calcul du gradient de la fonctionnelle
         Vecteur<double> g_k = toVecteur(grad_fonctionnelle(Image, x));
-        cout << "oui" << endl;
+        cout << "oui, norme du gradient : "<< g_k.norm() << endl;
         // Test de la condition
         if(g_k.norm()<epsilon){
             return x_new;
         }
         Vecteur<double> q = g_k;
-        cout << "oui" << endl;
+        // cout << "oui" << endl;
         double rho_i = 0;
         for(int i=k-1;i>=k-m;i--){
             if(i%m<0){
@@ -183,18 +188,20 @@ Vecteur<double> BFGS(const Matrice& Image,Vecteur<double>& x){
                 indice = i%m;
             }
             rho_i = 1/(y[indice]*s[indice]);
-            cout << "oui_2" << endl;
-            alpha_k(indice)= rho_i*s[indice]*q;
-            cout << "oui_2" << endl;
-            printf("dimension q : %d , dimension alpha_k : %d, dimension y : %d , indice %d \n",q.dim,alpha_k.dim,y[indice].dim,indice);
-            q = q-alpha_k(indice)*y[indice];
-            cout << "oui" << endl;
+            // cout << "oui_2" << endl;
+            alpha_k(indice+1)= rho_i*s[indice]*q;
+            // cout << "oui_2" << endl;
+            // printf("dimension q : %d , dimension alpha_k : %d, dimension y : %d , indice %d \n",q.dim,alpha_k.dim,y[indice].dim,indice);
+            q = q-alpha_k(indice+1)*y[indice];
+            // cout << "oui" << endl;
         }
-        cout << "oui" << endl;
-        gamma_k = (s[(k-1)%m]*y[(k-1)%m])/(y[(k-1)%m]*y[(k-1)%m]);
+        // cout << "oui" << endl;
+        if(k>0){
+            gamma_k = (s[(k-1)%m]*y[(k-1)%m])/(y[(k-1)%m]*y[(k-1)%m]);
+        }
         Matrice_diag H_k0 = gamma_k*Identity;
         Vecteur<double> z = H_k0 * q;
-        cout << "oui" << endl;
+        // cout << "oui" << endl;
         for(int i=k-m;i<=k-1;i++){
             if(i%m<0){
                 indice = i%m+m;
@@ -203,15 +210,15 @@ Vecteur<double> BFGS(const Matrice& Image,Vecteur<double>& x){
                 indice = i%m;
             }
             rho_i = 1/(y[indice]*s[indice]);
-            beta_k(indice)= rho_i*y[indice]*z;
-            z = z + s[indice]*(alpha_k(indice)-beta_k(indice));
+            beta_k(indice+1)= rho_i*y[indice]*z;
+            z = z + s[indice]*(alpha_k(indice+1)-beta_k(indice+1));
         }
-        cout << "oui" << endl;
+        // cout << "oui" << endl;
         z*=-1; // z est la direction de descente d_k = -H_k*g_k
 
         
         // Calcul du pas alpha respectant la condition de Wolfe
-        alpha = Wolfe(Image,x_new,z, g_k);
+        alpha = Wolfe(Image,x,z, g_k);
         x_new = x + z * alpha;
 
         y[k % m] = toVecteur(grad_fonctionnelle(Image,x_new)) - toVecteur(grad_fonctionnelle(Image,x));
@@ -219,8 +226,35 @@ Vecteur<double> BFGS(const Matrice& Image,Vecteur<double>& x){
         x = x_new;
         k++;
     }
+    // cout << toVecteur(grad_fonctionnelle(Image, x)) <<endl;
     cout << "Norme du Gradient : "<< toVecteur(grad_fonctionnelle(Image, x)).norm()<<endl;
-    cout << "L'algorithme n'a pas convergé en" << i_max << " itérations " <<endl; 
+    cout << "L'algorithme n'a pas convergé en " << i_max << " itérations " <<endl; 
+    cout << "problem" <<endl;
+    /*
+    for(int i=0;i<m;i++){
+        s[i].clear();
+        y[i].clear();
+    }
+    */
+    // beta_k alpha_k Identity xnew g_k q z Hk_0
+
+    cout << "nouveaux" << endl;
+    Vecteur<double> nouveaux(2,1.0);
+    nouveaux.clear();
+    cout << "beta_k" <<endl;
+    for(int i=1;i<=m;i++){
+        beta_k(i) = 0;
+    }
+    cout << beta_k;
+    beta_k.clear();
+    cout << "initial" <<endl;
+    initial.clear();
+    cout << "alpha_k" <<endl;
+    cout << alpha_k ;
+    cout << "ouai"<< endl;
+    alpha_k.clear();
+    
+    // detruit tout avant de return 
     return x;
 }
 
@@ -228,19 +262,22 @@ double Wolfe_hauteur(const Matrice& Image, Vecteur<double>& x, Vecteur<double>& 
 
     int i = 0;
     double alpha = 1;
+    // cout << "Wolfe "<<endl;
     Vecteur<double> x_new = x + alpha * z;
     double e_new = fonctionnelle_hauteur(Image,x_new);
+    // cout << "Wolfe "<<endl;
     double e = fonctionnelle_hauteur(Image,x);
     double grad_e_pk = gradient*z;
-    Vecteur<double> grad_e_new = grad_fonctionnelle_hauteur(Image, x_new);
-
+    Vecteur<double> grad_e_new = toVecteur(grad_fonctionnelle_hauteur(Image, x_new));
+    // cout << "Wolfe "<<endl;
     while(((e_new>e+w1*alpha*grad_e_pk || abs(grad_e_new*z))>w2*abs(grad_e_pk)) && (i<i_max)){
         i++;
         alpha /= 2;
         x_new = x + alpha * z;
         e_new = fonctionnelle_hauteur(Image,x_new);
-        grad_e_new = grad_fonctionnelle_hauteur(Image, x_new);
+        grad_e_new = toVecteur(grad_fonctionnelle_hauteur(Image, x_new));
     }
+    cout << "alpha "<< alpha<<endl;
     return alpha;
 
 }
@@ -255,6 +292,10 @@ Vecteur<double> BFGS_hauteur(const Matrice& Image,Vecteur<double>& x){
     int m = 4;
     vector<Vecteur<double>> s(m); // vecteur de vecteur de s allant de k-1 à k-m
     vector<Vecteur<double>> y(m); 
+    for(int i=0;i<m;i++){
+        s[i].init(x.dim,0.1);
+        y[i].init(x.dim,0.1);
+    }
     Vecteur<double> alpha_k(m, 0);
     Vecteur<double> beta_k(m, 0);
     double gamma_k = 0;
@@ -262,16 +303,19 @@ Vecteur<double> BFGS_hauteur(const Matrice& Image,Vecteur<double>& x){
     double alpha = 0;
     int k = 0;
     int indice = 0;
+    cout << "oui 1"<<endl;
     while(k<i_max){
         // VOIR WIKIPEDIA POUR LE MODÈLE
 
         // Calcul du gradient de la fonctionnelle
-        Vecteur<double> g_k = grad_fonctionnelle_hauteur(Image, x_new);
-
+        Vecteur<double> g_k = toVecteur(grad_fonctionnelle_hauteur(Image, x));
+        cout << "Norme du Gradient : "<< g_k.norm()<<endl;
         // Test de la condition
         if(g_k.norm()<epsilon){
             return x_new;
         }
+        // cout << "oui 2"<<endl;
+
         Vecteur<double> q = g_k;
 
         double rho_i = 0;
@@ -283,13 +327,15 @@ Vecteur<double> BFGS_hauteur(const Matrice& Image,Vecteur<double>& x){
                 indice = i%m;
             }
             rho_i = 1/(y[indice]*s[indice]);
-            cout << "oui_2" << endl;
-            alpha_k(indice)= rho_i*s[indice]*q;
-            cout << "oui_2" << endl;
-            printf("dimension q : %d , dimension alpha_k : %d, dimension y : %d , indice %d \n",q.dim,alpha_k.dim,y[indice].dim,indice);
-            q = q-alpha_k(indice)*y[indice];
-            cout << "oui" << endl;
+            // cout << "oui_2" << endl;
+            alpha_k(indice+1)= rho_i*s[indice]*q;
+            
+            // cout << "oui_2" << endl;
+            // printf("dimension q : %d , dimension alpha_k : %d, dimension y : %d , indice %d \n",q.dim,alpha_k.dim,y[indice].dim,indice);
+            q = q-alpha_k(indice+1)*y[indice];
+            // cout << "oui" << endl;
         }
+        cout << alpha_k;
         
         gamma_k = (s[(k-1)%m]*y[(k-1)%m])/(y[(k-1)%m]*y[(k-1)%m]);
         Matrice_diag H_k0 = gamma_k*Identity;
@@ -303,22 +349,37 @@ Vecteur<double> BFGS_hauteur(const Matrice& Image,Vecteur<double>& x){
                 indice = i%m;
             }
             rho_i = 1/(y[indice]*s[indice]);
-            beta_k(indice)= rho_i*y[indice]*z;
-            z = z + s[indice]*(alpha_k(indice)-beta_k(indice));
+            beta_k(indice+1)= rho_i*y[indice]*z;
+            z = z + s[indice]*(alpha_k(indice+1)-beta_k(indice+1));
         }
 
         z*=-1; // z est la direction de descente d_k = -H_k*g_k
 
+        // cout << "oui 5 "<<endl;
         
         // Calcul du pas alpha respectant la condition de Wolfe
         alpha = Wolfe_hauteur(Image,x_new,z, g_k);
         x_new = x + z * alpha;
-
-        y[k % m] = grad_fonctionnelle_hauteur(Image,x_new) - grad_fonctionnelle_hauteur(Image,x);
+        // cout << "oui 6"<<endl;
+        y[k % m] = toVecteur(grad_fonctionnelle_hauteur(Image,x_new)) - toVecteur(grad_fonctionnelle_hauteur(Image,x));
         s[k % m] = x_new- x;
         x = x_new;
         k++;
-    }
+        cout << "oui"<<endl;
 
+    }
+    cout << "yes" <<endl;
+    cout << "Norme du Gradient : "<< toVecteur(grad_fonctionnelle_hauteur(Image, x)).norm() <<endl;
+    cout << "L'algorithme n'a pas convergé en " << i_max << " itérations " <<endl; 
+    cout << "beta_k" <<endl;
+    for(int i=1;i<=m;i++){
+        beta_k(i) = 0;
+    }
+    cout << beta_k;
+    beta_k.clear();
+    cout << "alpha_k" <<endl;
+    cout << alpha_k ;
+    cout << "ouai"<< endl;
+    alpha_k.clear();
 
 }

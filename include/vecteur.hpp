@@ -18,6 +18,7 @@ class Vecteur
 
     //Destructeur
     ~Vecteur();
+    void clear();
 
     // initialisation 
     void init(int d, T x = T(0));
@@ -46,7 +47,7 @@ class Vecteur
 
 //Constructeurs
 template <typename T>
-Vecteur<T>::Vecteur() : dim(0), val(0){};
+Vecteur<T>::Vecteur() : dim(0), val(nullptr){};
 
 template <typename T>
 Vecteur<T>::Vecteur(int d, T v)
@@ -63,7 +64,7 @@ template <typename T>
 Vecteur<T>::Vecteur(const Vecteur<T> &V)
 {
     dim = V.dim;
-    val = NULL;
+    val = nullptr;
     if(dim<=0) return;
     val = new T[dim];
     for (int i = 0; i < dim; i++)
@@ -76,9 +77,21 @@ Vecteur<T>::Vecteur(const Vecteur<T> &V)
 template <typename T>
 Vecteur<T>::~Vecteur()
 {
-    if (val != 0)
+    if (val != nullptr){
         delete[] val;
+        val = nullptr;
+    }
 };
+
+template <typename T>
+void Vecteur<T>::clear(){
+    if (val != nullptr){
+        // cout << "dimension : "<< dim << endl;
+        delete[] val;
+        // cout << "cleared" <<endl;
+        val = nullptr;
+    }
+}
 
 // initialisation 
 template <typename T>
@@ -96,8 +109,7 @@ template <typename T>
 Vecteur<T> &Vecteur<T>::operator=(const Vecteur<T> &V)
 {
     dim = V.dim;
-    if (val != 0)
-        delete[] val;
+    clear();
     val = new T[dim];
     for (int i = 0; i < dim; i++)
     {

@@ -63,6 +63,9 @@ public:
   // Destructeur
   ~Matrice_diag();
 
+  // clear
+	void clear();
+
   friend ostream &operator<<(ostream &, const Matrice_diag &M);
   Matrice_diag &operator=(const Matrice_diag &M);
   Matrice_diag operator*(const double nb) const;
