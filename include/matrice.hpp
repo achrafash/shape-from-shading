@@ -48,8 +48,8 @@ class Matrice
 
 Matrice transpose(const Matrice &M);
 Vecteur<double> toVecteur(const Matrice &M);
-
-
+Matrice operator*(const Matrice& M,const double nb);
+Matrice operator*(const double nb,const Matrice& M);
 
 class Matrice_diag
 { // classe pour les matrices carrées diagonales
@@ -63,10 +63,15 @@ public:
   // Destructeur
   ~Matrice_diag();
 
+  // clear
+	void clear();
+
   friend ostream &operator<<(ostream &, const Matrice_diag &M);
   Matrice_diag &operator=(const Matrice_diag &M);
   Matrice_diag operator*(const double nb) const;
   Vecteur<double> operator*(const Vecteur<double> &V) const;
 };
+
+Matrice_diag operator*(const double nb,const Matrice_diag & M);
 
 #endif

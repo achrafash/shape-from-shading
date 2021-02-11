@@ -1,5 +1,5 @@
-#include "matrice.hpp"
-#include "vecteur.hpp"
+#include "/home/othmane/shape/shape-from-shading/include/matrice.hpp"
+#include "/home/othmane/shape/shape-from-shading/include/vecteur.hpp"
 #include <cstdlib>
 #include <iostream>
 #include <string>
@@ -13,7 +13,7 @@ Matrice::Matrice()
 {
 	n = 0;
 	m = 0;
-	val = 0;
+	val = nullptr;
 };
 
 Matrice::Matrice(int n_l, int n_c)
@@ -98,13 +98,15 @@ Matrice::Matrice(int dim, const string &id)
 
 Matrice::~Matrice()
 {
-	if (val != 0)
+	if (val != nullptr)
 	{
 		for (int i = 0; i < n; i++)
 		{
 			delete[] val[i];
+			val[i] = nullptr;
 		}
 		delete[] val;
+		val = nullptr;
 		n = 0;
 		m = 0;
 	}
@@ -121,8 +123,10 @@ Matrice &Matrice::operator=(const Matrice &M)
 			for (int i = 0; i < n; i++)
 			{
 				delete[] val[i];
+				val[i] = nullptr;
 			}
 			delete[] val;
+			val = nullptr;
 			n = M.n;
 			m = M.m;
 			val = new double *[n];
@@ -359,12 +363,21 @@ double Matrice::norm()
 	return sqrt(norme);
 }
 
+Matrice operator*(const Matrice& M,const double nb){
+	Matrice e = M;
+	e*=nb;
+	return e;
+}
+Matrice operator*(const double nb,const Matrice& M){
+	return M*nb;
+}
+
 //Matrices carrées diagonales
 
 Matrice_diag::Matrice_diag()
 {
 	n = 0;
-	val = 0;
+	val = nullptr;
 };
 
 Matrice_diag::Matrice_diag(int n_l, double valeur)
@@ -380,16 +393,17 @@ Matrice_diag::Matrice_diag(int n_l, double valeur)
 
 Matrice_diag::~Matrice_diag()
 {
-	if (val != 0)
+	if (val != nullptr)
 	{
 		delete[] val;
 		n = 0;
+		val = nullptr;
 	}
 };
 
 ostream &operator<<(ostream &out, const Matrice_diag &M)
 {
-	if (M.val == NULL)
+	if (M.val == nullptr)
 	{
 		cout << "La matrice ne présente pas de valeur !\n";
 		exit(1);
@@ -419,6 +433,7 @@ Matrice_diag &Matrice_diag::operator=(const Matrice_diag &M)
 		if (M.n != n) // si tailles pas compatibles
 		{
 			delete[] val;
+			val = nullptr;
 			n = M.n;
 			val = new double[n];
 		}
@@ -454,3 +469,19 @@ Vecteur<double> Matrice_diag::operator*(const Vecteur<double> &V) const
 	}
 	return temp;
 };
+
+Matrice_diag operator*(const double nb,const Matrice_diag & M){
+	Matrice_diag tmp(M.n, 0);
+	for (int i = 0; i < M.n; i++)
+		tmp.val[i] = M.val[i] * nb;
+
+	return tmp;
+
+}
+
+void Matrice_diag::clear(){
+	if(val != nullptr){
+		delete[] val;
+		val = nullptr;
+	}
+}

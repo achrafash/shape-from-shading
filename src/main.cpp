@@ -1,9 +1,14 @@
 #include <iostream>
 #include "matrice.hpp"
 #include "conversion_image_matrice.hpp"
+#include "vecteur.hpp"
+#include "lbfgs.hpp"
+
+// g++ src/main.cpp src/conversion_image_matrice.cpp src/matrice.cpp src/vecteur.cpp src/lbfgs.cpp -o main.exe
 
 int main(int argc, char *argv[])
 {
+
 	// charger une image, la convertir en fichier .csv et créer une matrice image et la remplir des niveaux de gris de l'image initiale.
 
 	// Done by achraf
@@ -13,19 +18,31 @@ int main(int argc, char *argv[])
 
 	// Faire une boucle et appeler le code GBFS
 
-	// Méthode L-BFGS
+	// Appel de la Méthode L-BFGS
 
-	// float w1 = 10e-6;
-	// float w2 = 10e-6;
-	// float epsilon = 10e-6;
+	Matrice Image = image_to_matrice("lib/dragon.csv");
 
-	// int n = 100;
-	// int m = 100;
+	// Excellent maintenant, on peut travailler
 
-	// Matrice p(n,m);
-	// Matrice q(n,m);
+	Vecteur<double> x0(2 * Image.n * Image.m, 0.5);
 
-	// Matrice W1(n,m);
+	cout << " BFGS Algorithme " << endl;
+
+	Vecteur<double> x = BFGS(Image, x0);
+
+	cout << "OUI" << endl;
+
+	Vecteur<double> h0(Image.n * Image.m, 0);
+
+	Matrice etoile_pq = x.toMatrice(2 * Image.n, Image.m);
+
+	cout << " BFGS Hauteur Algorithme " << endl;
+
+	Vecteur<double> h_final = BFGS_hauteur(etoile_pq, h0);
+
+	Matrice result = h_final.toMatrice(Image.n, Image.m);
+
+	cout << "Fini" << endl;
 
 	return 0;
 }
