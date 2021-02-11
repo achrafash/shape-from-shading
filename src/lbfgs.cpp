@@ -156,14 +156,14 @@ Vecteur<double> BFGS(const Matrice &Image, Vecteur<double> &x)
     Vecteur<double> x_new = x;
     int n_ligne = Image.n;
     int m_colonne = Image.m;
-    int m = 4;
+    int m = 6;
     vector<Vecteur<double>> s(m); // vecteur de vecteur de s allant de k-1 à k-m
     Vecteur<double> initial(x.dim, 1);
     vector<Vecteur<double>> y(m);
     for (int i = 0; i < m; i++)
     {
-        s[i].init(x.dim, 0.01);
-        y[i].init(x.dim, 0.01);
+        s[i].init(x.dim, 0.1);
+        y[i].init(x.dim, 0.1);
     }
     Vecteur<double> alpha_k(m, 0);
     Vecteur<double> beta_k(m, 0);
@@ -178,9 +178,10 @@ Vecteur<double> BFGS(const Matrice &Image, Vecteur<double> &x)
         // cout << "oui" << endl;
         // Calcul du gradient de la fonctionnelle
         Vecteur<double> g_k = toVecteur(grad_fonctionnelle(Image, x));
+        cout << "Itérations : " << k << endl;
         cout << "oui, norme du gradient : " << g_k.norm() << endl;
         // Test de la condition
-        if (g_k.norm() < epsilon)
+        if (g_k.norm() < epsilon_1)
         {
             return x;
         }
@@ -250,7 +251,7 @@ Vecteur<double> BFGS(const Matrice &Image, Vecteur<double> &x)
     }
     */
     // beta_k alpha_k Identity xnew g_k q z Hk_0
-
+    /*
     cout << "nouveaux" << endl;
     Vecteur<double> nouveaux(2, 1.0);
     nouveaux.clear();
@@ -267,7 +268,7 @@ Vecteur<double> BFGS(const Matrice &Image, Vecteur<double> &x)
     cout << alpha_k;
     cout << "ouai" << endl;
     alpha_k.clear();
-
+    */
     // detruit tout avant de return
     return x;
 }
@@ -292,7 +293,7 @@ double Wolfe_hauteur(const Matrice &Image, Vecteur<double> &x, Vecteur<double> &
         e_new = fonctionnelle_hauteur(Image, x_new);
         grad_e_new = toVecteur(grad_fonctionnelle_hauteur(Image, x_new));
     }
-    cout << "alpha " << alpha << endl;
+    // cout << "alpha " << alpha << endl;
     return alpha;
 }
 
@@ -303,7 +304,7 @@ Vecteur<double> BFGS_hauteur(const Matrice &Image, Vecteur<double> &x)
     Vecteur<double> x_new = x;
     int n_ligne = Image.n;
     int m_colonne = Image.m;
-    int m = 4;
+    int m = 8;
     vector<Vecteur<double>> s(m); // vecteur de vecteur de s allant de k-1 à k-m
     vector<Vecteur<double>> y(m);
     for (int i = 0; i < m; i++)
@@ -313,7 +314,7 @@ Vecteur<double> BFGS_hauteur(const Matrice &Image, Vecteur<double> &x)
     }
     Vecteur<double> alpha_k(m, 0);
     Vecteur<double> beta_k(m, 0);
-    double gamma_k = 0;
+    double gamma_k = 1;
     double beta_i = 0;
     double alpha = 0;
     int k = 0;
@@ -325,11 +326,11 @@ Vecteur<double> BFGS_hauteur(const Matrice &Image, Vecteur<double> &x)
 
         // Calcul du gradient de la fonctionnelle
         Vecteur<double> g_k = toVecteur(grad_fonctionnelle_hauteur(Image, x));
-        cout << x.norm() <<endl;
+        // cout << x.norm() <<endl;
         cout << "Itérations : " << k << endl;
         cout << "Norme du Gradient : " << g_k.norm() << endl;
         // Test de la condition
-        if (g_k.norm() < epsilon)
+        if (g_k.norm() < epsilon_2)
         {
             return x;
         }
