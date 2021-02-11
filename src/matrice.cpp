@@ -1,5 +1,5 @@
-#include "/home/othmane/shape/shape-from-shading/include/matrice.hpp"
-#include "/home/othmane/shape/shape-from-shading/include/vecteur.hpp"
+#include "matrice.hpp"
+#include "vecteur.hpp"
 #include <cstdlib>
 #include <iostream>
 #include <string>
@@ -363,13 +363,15 @@ double Matrice::norm()
 	return sqrt(norme);
 }
 
-Matrice operator*(const Matrice& M,const double nb){
+Matrice operator*(const Matrice &M, const double nb)
+{
 	Matrice e = M;
-	e*=nb;
+	e *= nb;
 	return e;
 }
-Matrice operator*(const double nb,const Matrice& M){
-	return M*nb;
+Matrice operator*(const double nb, const Matrice &M)
+{
+	return M * nb;
 }
 
 //Matrices carrées diagonales
@@ -383,7 +385,7 @@ Matrice_diag::Matrice_diag()
 Matrice_diag::Matrice_diag(int n_l, double valeur)
 {
 	n = n_l;
-	val = new double [n];
+	val = new double[n];
 
 	for (int i = 0; i < n; i++)
 	{
@@ -412,7 +414,7 @@ ostream &operator<<(ostream &out, const Matrice_diag &M)
 	{
 		for (int j = 0; j < M.n; j++)
 		{
-			if (i==j)
+			if (i == j)
 			{
 				cout << M.val[i] << " ";
 			}
@@ -470,17 +472,19 @@ Vecteur<double> Matrice_diag::operator*(const Vecteur<double> &V) const
 	return temp;
 };
 
-Matrice_diag operator*(const double nb,const Matrice_diag & M){
+Matrice_diag operator*(const double nb, const Matrice_diag &M)
+{
 	Matrice_diag tmp(M.n, 0);
 	for (int i = 0; i < M.n; i++)
 		tmp.val[i] = M.val[i] * nb;
 
 	return tmp;
-
 }
 
-void Matrice_diag::clear(){
-	if(val != nullptr){
+void Matrice_diag::clear()
+{
+	if (val != nullptr)
+	{
 		delete[] val;
 		val = nullptr;
 	}
