@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
 
 	// Appel de la Méthode L-BFGS
 
-	Matrice Image = image_to_matrice("lib/dragon.csv");
+	Matrice Image = image_to_matrice(argv[1]);
 
 	// Excellent maintenant, on peut travailler
 
