@@ -1,6 +1,7 @@
 .vscode
 .DS_Store
 main
+main.exe
 lib/*.jpeg
 lib/*.png
 lib/*.csv
