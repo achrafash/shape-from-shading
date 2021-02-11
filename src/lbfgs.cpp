@@ -133,7 +133,7 @@ double Wolfe(const Matrice& Image, Vecteur<double>& x, Vecteur<double>& z, Vecte
     double grad_e_pk = gradient*z;
     Vecteur<double> grad_e_new = toVecteur(grad_fonctionnelle(Image, x_new));
 
-    while(((e_new>e+w1*alpha*grad_e_pk || abs(grad_e_new*z))>w2*abs(grad_e_pk)) && (i<20)){
+    while(((e_new>e+w1*alpha*grad_e_pk || abs(grad_e_new*z))>w2*abs(grad_e_pk)) && (i<i_max_Wolfe)){
         i++;
         alpha /= 2;
         x_new = x + alpha * z;
@@ -270,7 +270,7 @@ double Wolfe_hauteur(const Matrice& Image, Vecteur<double>& x, Vecteur<double>& 
     double grad_e_pk = gradient*z;
     Vecteur<double> grad_e_new = toVecteur(grad_fonctionnelle_hauteur(Image, x_new));
     // cout << "Wolfe "<<endl;
-    while(((e_new>e+w1*alpha*grad_e_pk || abs(grad_e_new*z))>w2*abs(grad_e_pk)) && (i<i_max)){
+    while(((e_new>e+w1*alpha*grad_e_pk || abs(grad_e_new*z))>w2*abs(grad_e_pk)) && (i<i_max_Wolfe)){
         i++;
         alpha /= 2;
         x_new = x + alpha * z;
