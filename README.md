@@ -16,7 +16,8 @@ Install Vizir to Visualize the result
 
 ## Compile
 
-Pour l'instant, 
-
+```
+g++ -o main -Iinclude -Isrc src/main.cpp src/matrice.cpp src/conversion_image_matrice.cpp
+```
 
 g++ src/main.cpp src/conversion_image_matrice.cpp src/matrice.cpp src/vecteur.cpp src/lbfgs.cpp -o main.exe
