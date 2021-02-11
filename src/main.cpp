@@ -12,15 +12,12 @@ int main(int argc, char *argv[])
 	// charger une image, la convertir en fichier .csv et créer une matrice image et la remplir des niveaux de gris de l'image initiale.
 
 	// Done by achraf
-	Matrice M;
-	M = image_to_matrice("lib/image.csv");
-	M.print();
+	Matrice Image = image_to_matrice(argv[1]);
+	Image.print();
 
 	// Faire une boucle et appeler le code GBFS
 
 	// Appel de la Méthode L-BFGS
-
-	Matrice Image = image_to_matrice(argv[1]);
 
 	// Excellent maintenant, on peut travailler
 
