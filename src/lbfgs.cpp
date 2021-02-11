@@ -101,7 +101,7 @@ double fonctionnelle_hauteur(const Matrice &x, const Vecteur<double> &h)
     return result;
 }
 
-//
+// 
 Matrice grad_fonctionnelle_hauteur(const Matrice &Image, Vecteur<double> &h)
 {
     int nb_l = Image.n / 2;
@@ -325,6 +325,7 @@ Vecteur<double> BFGS_hauteur(const Matrice &Image, Vecteur<double> &x)
 
         // Calcul du gradient de la fonctionnelle
         Vecteur<double> g_k = toVecteur(grad_fonctionnelle_hauteur(Image, x));
+        cout << x.norm() <<endl;
         cout << "Itérations : " << k << endl;
         cout << "Norme du Gradient : " << g_k.norm() << endl;
         // Test de la condition

@@ -2,7 +2,7 @@ from PIL import Image
 import csv
 import numpy as np
 
-img = Image.open('images/sphere.jpeg').convert('LA')
+img = Image.open('../images/sphere_resized.png').convert('LA')
 img.save('greyscale.png')
 
 img = np.array(Image.open("greyscale.png"))
@@ -26,4 +26,4 @@ def img_to_csv(filename, array):
         writer.writerow([len(list_array),len(list_array[0])])
         writer.writerows(list_array)
    
-img_to_csv("", img)
+img_to_csv("image", img)

@@ -13,26 +13,25 @@ int main(int argc, char *argv[])
 
 	// Done by achraf
 	Matrice Image = image_to_matrice(argv[1]);
-	Image.print();
+	// Image.print();
 
 	// Faire une boucle et appeler le code GBFS
 
 	// Appel de la Méthode L-BFGS
 
 	// Excellent maintenant, on peut travailler
-
-	Vecteur<double> x0(2 * Image.n * Image.m, 0.5);
+	Vecteur<double> x0(2 * Image.n * Image.m, 1);
 
 	cout << " BFGS Algorithme " << endl;
 
 	Vecteur<double> x = BFGS(Image, x0);
 
 	cout << "OUI" << endl;
+	
+	Vecteur<double> h0(Image.n * Image.m, 5);
 
-	Vecteur<double> h0(Image.n * Image.m, 0);
-
-	Matrice etoile_pq = x.toMatrice(2 * Image.n, Image.m);
-
+	// Matrice etoile_pq = x.toMatrice(2 * Image.n, Image.m);
+	Matrice etoile_pq(2*Image.n,Image.m,5);
 	cout << " BFGS Hauteur Algorithme " << endl;
 
 	Vecteur<double> h_final = BFGS_hauteur(etoile_pq, h0);
@@ -40,6 +39,6 @@ int main(int argc, char *argv[])
 	Matrice result = h_final.toMatrice(Image.n, Image.m);
 
 	cout << "Fini" << endl;
-
+	
 	return 0;
 }

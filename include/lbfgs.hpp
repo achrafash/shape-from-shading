@@ -2,14 +2,14 @@
 #include "vecteur.hpp"
 #include <vector>
 
-const double delta = 1;
-const double lambda_int = 1 ;
-const double lambda_csmo = 1;
+const double delta = 0.1;
+const double lambda_int = 0.1 ;
+const double lambda_csmo = 0.1;
 
-const double w1 = 1.0e-6;
-const double w2 = 1.0e-6;
-const double epsilon = 10e-6;
-const int i_max = 500;
+const double w1 = 1.0e-4;
+const double w2 = 1.0e-4;
+const double epsilon = 10e-4;
+const int i_max = 100;
 const int i_max_Wolfe = 5;
 
 Vecteur<double> BFGS(const Matrice& Image,Vecteur<double>& x);

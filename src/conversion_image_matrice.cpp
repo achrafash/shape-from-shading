@@ -22,19 +22,16 @@ Matrice image_to_matrice(string nom_fichier)
         int i(1), j(1);
         for (int i = 1; i <= n; i++)
         {
-            for (int j = 1; j <= n; j++)
-            {
+            for (int j = 1; j <= m; j++)
+            {   
+                if(j<m){
                 image >> Image(i, j) >> virgule;
+                }
+                else{
+                    image>>Image(i,j);
+                }
             }
         }
-        /*
-    while ( getline (image,line) )
-    {
-      image>>Image(i,j)>>virgule;
-      if(j==n)
-      j++;
-    }
-    */
         image.close();
         return Image;
     }
