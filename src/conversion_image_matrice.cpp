@@ -9,7 +9,6 @@ Matrice image_to_matrice(string nom_fichier)
 
     ifstream image(nom_fichier.c_str(), ios::in);
 
-    ifstream image(nom_fichier.c_str(), ios::in);
     int n = 0;
     int m = 0;
     string line;
