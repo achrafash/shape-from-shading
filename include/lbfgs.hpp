@@ -3,15 +3,15 @@
 #include <vector>
 
 const double delta = 0.1;
-const double lambda_int = 0.1 ;
-const double lambda_csmo = 0.1;
+const double lambda_int = 1 ;
+const double lambda_csmo = 1;
 
-const double w1 = 1.0e-3;
-const double w2 = 1.0;
+const double w1 = 1.0e-4;
+const double w2 = 0.999;
 const double epsilon_1 = 100;
 const double epsilon_2 = 10e-3;
-const int i_max = 1000;
-const int i_max_Wolfe = 5;
+const int i_max = 10000;
+const int i_max_Wolfe = 20;
 
 Vecteur<double> BFGS(const Matrice& Image,Vecteur<double>& x);
 Vecteur<double> BFGS_hauteur(const Matrice& Image,Vecteur<double>& x);

@@ -2,7 +2,7 @@ from PIL import Image
 import csv
 import numpy as np
 
-img = Image.open('../images/sphere_2.png').convert('LA')
+img = Image.open('../images/dragon.jpeg').convert('LA')
 img.save('greyscale.png')
 
 img = np.array(Image.open("greyscale.png"))

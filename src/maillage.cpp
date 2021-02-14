@@ -3,10 +3,11 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <string>
 
-void generate_mesh(const Matrice &M)
+void generate_mesh(const Matrice &M,const string& name_mesh)
 {
-    std::ofstream outfile("image.mesh");
+    std::ofstream outfile(name_mesh);
     outfile << "MeshVersionFormatted 2" << std::endl
             << "Dimension 3" << std::endl
             << "# Set of mesh vertices (x,y,h(x,y),ref)" << std::endl
@@ -32,10 +33,11 @@ void generate_mesh(const Matrice &M)
     {
         for (int j = 1; j <= M.m - 1; j++)
         {
-            outfile << i + j - 1
-                    << " " << i + j
-                    << " " << i + j - 1 + M.n
-                    << " " << i + j + M.n << std::endl;
+            outfile << i + (j-1)*M.n
+                    << " " << i + 1 + (j-1)*M.n
+                    << " " << i + 1 + j*M.n
+                    << " " << i + j*M.n 
+                    << " " << 0 << std::endl;
         }
     }
 

@@ -3,8 +3,9 @@
 #include "conversion_image_matrice.hpp"
 #include "vecteur.hpp"
 #include "lbfgs.hpp"
+#include "maillage.hpp"
 
-// g++ src/main.cpp src/conversion_image_matrice.cpp src/matrice.cpp src/vecteur.cpp src/lbfgs.cpp -o main.exe
+//  g++ -o main.exe -Iinclude -Isrc src/main.cpp src/matrice.cpp src/conversion_image_matrice.cpp src/vecteur.cpp src/lbfgs.cpp src/maillage.cpp
 
 int main(int argc, char *argv[])
 {
@@ -20,18 +21,18 @@ int main(int argc, char *argv[])
 	// Appel de la Méthode L-BFGS
 
 	// Excellent maintenant, on peut travailler
-	Vecteur<double> x0(2 * Image.n * Image.m, 1);
+	Vecteur<double> x0(2 * Image.n * Image.m, 0.5);
 
 	cout << " BFGS Algorithme " << endl;
 
 	Vecteur<double> x = BFGS(Image, x0);
 
-	cout << "OUI" << endl;
+	// cout << "Convergence" << endl;
 	
-	Vecteur<double> h0(Image.n * Image.m, 5);
+	Vecteur<double> h0(Image.n * Image.m, 0);
 
-	// Matrice etoile_pq = x.toMatrice(2 * Image.n, Image.m);
-	Matrice etoile_pq(2*Image.n,Image.m,5);
+	Matrice etoile_pq = x.toMatrice(2 * Image.n, Image.m);
+	// Matrice etoile_pq(2*Image.n,Image.m,5);
 	cout << " BFGS Hauteur Algorithme " << endl;
 
 	Vecteur<double> h_final = BFGS_hauteur(etoile_pq, h0);
@@ -39,6 +40,8 @@ int main(int argc, char *argv[])
 	Matrice result = h_final.toMatrice(Image.n, Image.m);
 
 	cout << "Fini" << endl;
+	cout << "Génération du maillage... "<< endl;
+	generate_mesh(result,argv[2]);
 	
 	return 0;
 }

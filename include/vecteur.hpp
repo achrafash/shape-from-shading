@@ -300,6 +300,15 @@ Vecteur<T> operator*(const T a,const Vecteur<T>& V){
 template <typename T>
 Vecteur<T> operator*(const Vecteur<T>& V,const T a){
 }
-
+// moyenne
+template <typename T>
+double mean(Vecteur<T>& v)
+{
+    double m = v(1);
+    for(int i=2;i<=v.dim;i++){
+        m+=v(i);
+    }
+    return m/v.dim;
+};
 
 #endif
