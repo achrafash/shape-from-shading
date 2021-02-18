@@ -21,3 +21,6 @@ g++ -o main -Iinclude -Isrc src/main.cpp src/matrice.cpp src/conversion_image_ma
 ```
 
 g++ src/main.cpp src/conversion_image_matrice.cpp src/matrice.cpp src/vecteur.cpp src/lbfgs.cpp -o main.exe
+
+## Remarques
+Les images a fort contraste ne convergent pas. En général l'algorithme converge mieux avec un fond blanc.

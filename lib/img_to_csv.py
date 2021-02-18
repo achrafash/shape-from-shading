@@ -2,10 +2,11 @@ from PIL import Image
 import csv
 import numpy as np
 
-img = Image.open('../images/steve_re.png').convert('LA')
+img = Image.open('../images/dragon.jpeg').convert('LA')
 img.save('greyscale.png')
 
 img = np.array(Image.open("greyscale.png"))
+
 
 def flatten(liste):
     flat_list = []
@@ -16,14 +17,17 @@ def flatten(liste):
         flat_list.append(ligne)
     return flat_list
 
+
 def img_to_csv(filename, array):
     list_array = array.tolist()
     list_array = flatten(list_array)
     print(len(list_array))
     print(len(list_array[0]))
     with open(filename + '.csv', 'w', newline='') as csvfile:
-        writer = csv.writer(csvfile, delimiter=',',quotechar='"', quoting=csv.QUOTE_MINIMAL)
-        writer.writerow([len(list_array),len(list_array[0])])
+        writer = csv.writer(csvfile, delimiter=',',
+                            quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        writer.writerow([len(list_array), len(list_array[0])])
         writer.writerows(list_array)
-   
-img_to_csv("image", img)
+
+
+img_to_csv("dragon", img)

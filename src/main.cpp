@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
 	Vecteur<double> x = BFGS(Image, x0);
 
 	// cout << "Convergence" << endl;
-	
+
 	Vecteur<double> h0(Image.n * Image.m, 0);
 
 	Matrice etoile_pq = x.toMatrice(2 * Image.n, Image.m);
@@ -40,8 +40,13 @@ int main(int argc, char *argv[])
 	Matrice result = h_final.toMatrice(Image.n, Image.m);
 
 	cout << "Fini" << endl;
-	cout << "Génération du maillage... "<< endl;
-	generate_mesh(result,argv[2]);
-	
+	cout << "Génération du maillage... " << endl;
+	string output_file = argv[2];
+	if (!argv[2])
+	{
+		output_file = "maillage.mesh";
+	}
+	generate_mesh(result, argv[2]);
+
 	return 0;
 }
