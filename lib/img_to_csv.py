@@ -1,11 +1,13 @@
-from PIL import Image
-import csv
-import numpy as np
-
-img = Image.open('../images/steve_re.png').convert('LA')
+from PIL import Image # Importation du module 
+import csv # Importation du package csv
+import numpy as np # Importation de numpy 
+# Ouverture de l'image
+img = Image.open('../images/dragon.jpeg').convert('LA')
 img.save('greyscale.png')
 
 img = np.array(Image.open("greyscale.png"))
+
+# Définition de la matrice 
 
 def flatten(liste):
     flat_list = []
@@ -15,6 +17,8 @@ def flatten(liste):
             ligne.append(liste[i][j][0])
         flat_list.append(ligne)
     return flat_list
+
+# Conversion de l'image en fichier csv    
 
 def img_to_csv(filename, array):
     list_array = array.tolist()

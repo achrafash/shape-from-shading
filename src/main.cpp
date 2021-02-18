@@ -10,26 +10,25 @@
 int main(int argc, char *argv[])
 {
 
-	// charger une image, la convertir en fichier .csv et créer une matrice image et la remplir des niveaux de gris de l'image initiale.
-
+	// On charge une image, et converti en fichier .csv et on crée une matrice image 
+	// On la remplit avec les niveaux de gris de l'image initiale.
 	// Done by achraf
+
 	Matrice Image = image_to_matrice(argv[1]);
 	// Image.print();
 
-	// Faire une boucle et appeler le code GBFS
-
 	// Appel de la Méthode L-BFGS
-
-	// Excellent maintenant, on peut travailler
+	// Définition de x=(p,q) initiale
 	Vecteur<double> x0(2 * Image.n * Image.m, 0.5);
 
 	cout << " BFGS Algorithme " << endl;
-
+	// Appel de la Méthode L-BFGS
 	Vecteur<double> x = BFGS(Image, x0);
 
-	// cout << "Convergence" << endl;
-	
+	// Définition de la hauteur initiale
 	Vecteur<double> h0(Image.n * Image.m, 0);
+
+	// Définition de (p*,q*) sortant du BFGS
 
 	Matrice etoile_pq = x.toMatrice(2 * Image.n, Image.m);
 	// Matrice etoile_pq(2*Image.n,Image.m,5);
@@ -40,8 +39,8 @@ int main(int argc, char *argv[])
 	Matrice result = h_final.toMatrice(Image.n, Image.m);
 
 	cout << "Fini" << endl;
-	cout << "Génération du maillage... "<< endl;
-	generate_mesh(result,argv[2]);
+	cout << "Génération du maillage... "<< endl; 
+	generate_mesh(result,argv[2]); // Génération du maillage
 	
 	return 0;
 }
