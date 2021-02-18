@@ -2,22 +2,23 @@
 #include <cmath>
 
 // Ce code calcul la fonctionnelle e
-// Nous allons calculer la valeur de chaque fonctionnelle puis on fera la somme
+// Nous calculons la valeur de chaque fonctionnelle puis nous faisons la somme 
 
 double fonctionnelle(const Matrice &image, const Vecteur<double> &x)
-{
+{   
+    // Définition des valeurs de chaque fonctionnelle
     double e1 = 0, e2 = 0, e3 = 0;
-    int n_ligne = image.n;
-    int n_colonne = image.m;
-    Matrice p = x(0, n_ligne * n_colonne - 1).toMatrice(n_ligne, n_colonne);
-    Matrice q = x(n_ligne * n_colonne, 2 * n_ligne * n_colonne - 1).toMatrice(n_ligne, n_colonne);
+    int n_ligne = image.n; // nombres de lignes de la matrice image
+    int n_colonne = image.m; // nombres de colonne de la matrice image
+    Matrice p = x(0, n_ligne * n_colonne - 1).toMatrice(n_ligne, n_colonne); // définition de la dérivée de la hauteur par rapport à x
+    Matrice q = x(n_ligne * n_colonne, 2 * n_ligne * n_colonne - 1).toMatrice(n_ligne, n_colonne); // définition de la dérivée de la hauteur par rapport à y
 
     for (int i = 1; i <= n_ligne; i++)
     {
         for (int j = 1; j <= n_colonne; j++)
         {
             e1 += pow(image(i, j) - 255 / sqrt(1 + pow(p(i, j), 2) + pow(q(i, j), 2)), 2);
-            // si (i,j) est dans le domaine D1
+            // si (i,j) est dans le domaine D1 
             if (i != n_ligne && j != n_colonne)
             {
                 e2 += pow((p(i, j + 1) - p(i, j)) - q(i + 1, j) + q(i, j), 2);
@@ -25,12 +26,12 @@ double fonctionnelle(const Matrice &image, const Vecteur<double> &x)
             }
         }
     }
-
+    // on retourne la fonctionnelle globale avec chaque facteurs de pénalisation 
     return delta * delta * e1 + lambda_int * e2 + lambda_csmo * e3;
 }
 
 // Ce code calcul le gradient de la fonctionnelle e
-// Nous allons calculer les gradients de chaque fonctionnelle puis on fera la somme
+// Nous calculons la valeur de chaque gradient de fonctionnelle puis nous faisons la somme comme 
 
 Matrice grad_fonctionnelle(const Matrice &image, const Vecteur<double> &x)
 {
@@ -52,6 +53,7 @@ Matrice grad_fonctionnelle(const Matrice &image, const Vecteur<double> &x)
         {
 
             e1(i, j) = 2 * 255 * (image(i, j) * sqrt(1 + pow(p(i, j), 2) + pow(q(i, j), 2)) - 255) * (p(i, j) / pow(1 + pow(p(i, j), 2) + pow(q(i, j), 2), 2));
+            // si (i,j) est dans le domaine D1 
             if (i != 1 && j != 1 && i != n_ligne && j != n_colonne)
             {
                 e2(i, j) = 2 * p(i, j) - p(i, j - 1) - p(i, j + 1) - q(i, j) + q(i + 1, j) - q(i + 1, j - 1) + q(i, j - 1);
@@ -104,7 +106,7 @@ double fonctionnelle_hauteur(const Matrice &x, const Vecteur<double> &h)
     return result;
 }
 
-// 
+// Ce code calcule le gradient de la fonctionnelle hauteur
 Matrice grad_fonctionnelle_hauteur(const Matrice &Image, Vecteur<double> &h)
 {
     int nb_l = Image.n / 2;
@@ -116,6 +118,7 @@ Matrice grad_fonctionnelle_hauteur(const Matrice &Image, Vecteur<double> &h)
     {
         for (int j = 1; j < nb_c + 1; j++)
         {
+            // si (i,j) n'est pas au bord du domaine
             if (i != 1 && j != 1 && i != nb_l && j != nb_c)
             {
                 gradient(i, j) = 4 * hauteur(i, j) - hauteur(i - 1, j) - delta * Image(i - 1, j) - hauteur(i + 1, j) + delta * Image(i, j) - hauteur(i, j - 1) - delta * Image(i + nb_l, j - 1) - hauteur(i, j + 1) + delta * Image(i + nb_l, j);
@@ -126,7 +129,7 @@ Matrice grad_fonctionnelle_hauteur(const Matrice &Image, Vecteur<double> &h)
     return 2 * gradient;
 }
 
-// Ce code calcul le gradient de la fonctionnelle discrétisée pour retrouver la hauteur
+// Ce code calcule le gradient de la fonctionnelle discrétisée pour retrouver la hauteur
 // Nous allons calculer les gradients de chaque fonctionnelle puis on fera la somme
 
 double Wolfe(const Matrice &Image, Vecteur<double> &x, Vecteur<double> &z, Vecteur<double> &gradient)
@@ -141,11 +144,14 @@ double Wolfe(const Matrice &Image, Vecteur<double> &x, Vecteur<double> &z, Vecte
     Vecteur<double> grad_e_new = toVecteur(grad_fonctionnelle(Image, x_new));
 
     while(i<i_max_Wolfe){
+
+        // Si les conditions de Wolfe sont respectées 
         if(e_new<=e+w1*alpha*grad_e_pk && abs(grad_e_new*z)<=w2*abs(grad_e_pk) ){
             return alpha;
         }
         i++;
         alpha /= 2;
+        // mise à jour des fonctionnelles 
         x_new = x + alpha * z;
         e_new = fonctionnelle(Image, x_new);
         grad_e_new = toVecteur(grad_fonctionnelle(Image, x_new));
@@ -154,6 +160,8 @@ double Wolfe(const Matrice &Image, Vecteur<double> &x, Vecteur<double> &z, Vecte
 }
 
 // Méthode BFGS
+
+
 
 Vecteur<double> BFGS(const Matrice &Image, Vecteur<double> &x)
 {
@@ -164,20 +172,20 @@ Vecteur<double> BFGS(const Matrice &Image, Vecteur<double> &x)
     int m_colonne = Image.m;
     int m = 5;
     vector<Vecteur<double>> s(m); // vecteur de vecteur de s allant de k-1 à k-m
-    Vecteur<double> initial(x.dim, 1);
-    vector<Vecteur<double>> y(m);
+    Vecteur<double> initial(x.dim, 1); // vecteur de vecteur de s allant de k-1 à k-m
+    vector<Vecteur<double>> y(m); 
     for (int i = 0; i < m; i++)
     {
-        s[i].init(x.dim, 0.01);
+        s[i].init(x.dim, 0.01); 
         y[i].init(x.dim, 0.01);
     }
     Vecteur<double> alpha_k(m, 0);
     Vecteur<double> beta_k(m, 0);
-    double gamma_k = 1;
+    double gamma_k = 1; 
     double beta_i = 0;
     double alpha = 0;
-    int k = 0;
-    int indice = 0;
+    int k = 0; // Itérateur
+    int indice = 0; 
     while (k < i_max)
     {
         // VOIR WIKIPEDIA POUR LE MODÈLE
@@ -187,7 +195,7 @@ Vecteur<double> BFGS(const Matrice &Image, Vecteur<double> &x)
         Vecteur<double> g_k = toVecteur(grad_fonctionnelle(Image, x));
         cout << "Itérations : " << k << endl;
         cout << "oui, norme du gradient : " << g_k.norm() << endl;
-        // Test de la condition
+        // Test de la condition 
         if (g_k.norm() < epsilon_1)
         {
             return x;
@@ -218,6 +226,7 @@ Vecteur<double> BFGS(const Matrice &Image, Vecteur<double> &x)
         // cout << "oui" << endl;
         if (k > 0)
         {
+            // mise à jour de Gamma
             gamma_k = (s[(k - 1) % m] * y[(k - 1) % m]) / (y[(k - 1) % m] * y[(k - 1) % m]);
         }
         Matrice_diag H_k0 = gamma_k * Identity;
@@ -285,6 +294,8 @@ Vecteur<double> BFGS(const Matrice &Image, Vecteur<double> &x)
     return x;
 }
 
+// 
+
 double Wolfe_hauteur(const Matrice &Image, Vecteur<double> &x, Vecteur<double> &z, Vecteur<double> &gradient)
 {
 
@@ -311,6 +322,8 @@ double Wolfe_hauteur(const Matrice &Image, Vecteur<double> &x, Vecteur<double> &
     // cout << "alpha " << alpha << endl;
     return alpha;
 }
+
+// BFGS Hauteur
 
 Vecteur<double> BFGS_hauteur(const Matrice &Image, Vecteur<double> &x)
 {
@@ -380,7 +393,8 @@ Vecteur<double> BFGS_hauteur(const Matrice &Image, Vecteur<double> &x)
         // if(k==0){cout << q;}
         // valeur nan si on ne mets pas k>0
         if (k > 0)
-        {
+        {   
+            // Définition de Gamma
             gamma_k = (s[(k - 1) % m] * y[(k - 1) % m]) / (y[(k - 1) % m] * y[(k - 1) % m]);
         }
         // cout << "Gamma_k" << gamma_k <<endl;
