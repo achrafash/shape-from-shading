@@ -140,7 +140,10 @@ double Wolfe(const Matrice &Image, Vecteur<double> &x, Vecteur<double> &z, Vecte
     double grad_e_pk = gradient * z;
     Vecteur<double> grad_e_new = toVecteur(grad_fonctionnelle(Image, x_new));
 
-    while(((e_new>=e+w1*alpha*grad_e_pk || abs(grad_e_new*z))>=w2*abs(grad_e_pk)) && (i<i_max_Wolfe)){
+    while(i<i_max_Wolfe){
+        if(e_new<=e+w1*alpha*grad_e_pk && abs(grad_e_new*z)<=w2*abs(grad_e_pk) ){
+            return alpha;
+        }
         i++;
         alpha /= 2;
         x_new = x + alpha * z;
@@ -295,7 +298,10 @@ double Wolfe_hauteur(const Matrice &Image, Vecteur<double> &x, Vecteur<double> &
     double grad_e_pk = gradient * z;
     Vecteur<double> grad_e_new = toVecteur(grad_fonctionnelle_hauteur(Image, x_new));
     // cout << "Wolfe "<<endl;
-    while(((e_new>=e+w1*alpha*grad_e_pk || abs(grad_e_new*z))>=w2*abs(grad_e_pk)) && (i<i_max_Wolfe)){
+    while(i<i_max_Wolfe){
+        if(e_new<=e+w1*alpha*grad_e_pk && abs(grad_e_new*z)<=w2*abs(grad_e_pk)){
+            return alpha;
+        }
         i++;
         alpha /= 2;
         x_new = x + alpha * z;
@@ -313,7 +319,7 @@ Vecteur<double> BFGS_hauteur(const Matrice &Image, Vecteur<double> &x)
     Vecteur<double> x_new = x;
     int n_ligne = Image.n;
     int m_colonne = Image.m;
-    int m = 5;
+    int m = 7;
     vector<Vecteur<double>> s(m); // vecteur de vecteur de s allant de k-1 à k-m
     vector<Vecteur<double>> y(m);
     for (int i = 0; i < m; i++)
@@ -429,3 +435,6 @@ Vecteur<double> BFGS_hauteur(const Matrice &Image, Vecteur<double> &x)
     */
     return x;
 }
+
+
+//
