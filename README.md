@@ -1,6 +1,9 @@
 # Shape from shading
 # Preview
 
+![Masque](mask_shape.png)
+![Jesus](jesus_shape.png)
+
 
 ---
 
