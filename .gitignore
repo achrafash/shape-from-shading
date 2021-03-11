@@ -2,3 +2,7 @@
 .DS_Store
 main
 main.exe
+
+*.mesh
+*.png
+*.csv
