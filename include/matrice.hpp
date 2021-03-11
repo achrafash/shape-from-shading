@@ -39,7 +39,6 @@ public:
 	Matrice &operator+=(const Matrice &M);
 	Matrice &operator-=(const Matrice &M);
 
-	void init();
 	double norm();
 	// Opérateurs d'affichage
 

@@ -286,17 +286,6 @@ Matrice &Matrice::operator-=(const Matrice &M)
 	return *this;
 };
 
-void Matrice::init()
-{
-	for (int i = 0; i < n; i++)
-	{
-		for (int j = 0; j < m; j++)
-		{
-			val[i][j] = pow(n / 2, 2) - pow(i - n / 2, 2) + pow(m / 2, 2) - pow(j - m / 2, 2);
-		}
-	}
-}
-
 // Opérateurs d'affichage
 
 void Matrice::print()
