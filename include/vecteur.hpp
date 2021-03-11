@@ -8,7 +8,7 @@ using namespace std;
 template <typename T>
 class Vecteur
 {
-  public:
+public:
     int dim;
     T *val;
     //Constructeurs
@@ -20,8 +20,9 @@ class Vecteur
     ~Vecteur();
     void clear();
 
-    // initialisation 
+    // initialisation
     void init(int d, T x = T(0));
+    void init(int n, int m);
 
     //Opérateurs internes
     Vecteur<T> &operator=(const Vecteur<T> &);
@@ -65,7 +66,8 @@ Vecteur<T>::Vecteur(const Vecteur<T> &V)
 {
     dim = V.dim;
     val = nullptr;
-    if(dim<=0) return;
+    if (dim <= 0)
+        return;
     val = new T[dim];
     for (int i = 0; i < dim; i++)
     {
@@ -77,15 +79,18 @@ Vecteur<T>::Vecteur(const Vecteur<T> &V)
 template <typename T>
 Vecteur<T>::~Vecteur()
 {
-    if (val != nullptr){
+    if (val != nullptr)
+    {
         delete[] val;
         val = nullptr;
     }
 };
 
 template <typename T>
-void Vecteur<T>::clear(){
-    if (val != nullptr){
+void Vecteur<T>::clear()
+{
+    if (val != nullptr)
+    {
         // cout << "dimension : "<< dim << endl;
         delete[] val;
         // cout << "cleared" <<endl;
@@ -93,14 +98,28 @@ void Vecteur<T>::clear(){
     }
 }
 
-// initialisation 
+// initialisation
 template <typename T>
-void Vecteur<T>::init(int d, T x ){
+void Vecteur<T>::init(int d, T x)
+{
     dim = d;
     val = new T[dim];
     for (int i = 0; i < dim; i++)
     {
         val[i] = x;
+    }
+}
+
+template <typename T>
+void Vecteur<T>::init(int image_width, int image_height)
+{
+    for (int i = 0; i < image_height; i++)
+    {
+        for (int j = 0; j < image_width; j++)
+        {
+            val[i * image_width + j] = pow(image_height / 2, 2) - pow(i - image_height / 2, 2) + pow(image_width / 2, 2) - pow(j - image_width / 2, 2);
+            val[i * image_width + j] /= image_height;
+        }
     }
 }
 
@@ -223,7 +242,7 @@ Vecteur<T> Vecteur<T>::concatenate(const Vecteur<T> &A)
 };
 
 template <typename T>
-Matrice Vecteur<T>::toMatrice(const int i, const int j)const
+Matrice Vecteur<T>::toMatrice(const int i, const int j) const
 {
     if (i * j != dim)
     {
@@ -235,7 +254,7 @@ Matrice Vecteur<T>::toMatrice(const int i, const int j)const
     {
         for (int l = 0; l < j; l++)
         {
-            temp.val[k][l] = val[l+k*j];
+            temp.val[k][l] = val[l + k * j];
         }
     }
     return temp;
@@ -290,25 +309,27 @@ double Vecteur<T>::norm()
     return sqrt(((*this) * (*this)));
 };
 template <typename T>
-Vecteur<T> operator*(const T a,const Vecteur<T>& V){
+Vecteur<T> operator*(const T a, const Vecteur<T> &V)
+{
 
     Vecteur<T> e = V;
-    e*= a;
+    e *= a;
     return e;
-
 }
 template <typename T>
-Vecteur<T> operator*(const Vecteur<T>& V,const T a){
+Vecteur<T> operator*(const Vecteur<T> &V, const T a)
+{
 }
 // moyenne
 template <typename T>
-double mean(Vecteur<T>& v)
+double mean(Vecteur<T> &v)
 {
     double m = v(1);
-    for(int i=2;i<=v.dim;i++){
-        m+=v(i);
+    for (int i = 2; i <= v.dim; i++)
+    {
+        m += v(i);
     }
-    return m/v.dim;
+    return m / v.dim;
 };
 
 #endif

@@ -27,6 +27,7 @@ int main(int argc, char *argv[])
 
 	// Définition de la hauteur initiale
 	Vecteur<double> h0(Image.n * Image.m, 0);
+	h0.init(Image.n, Image.m);
 
 	// Définition de (p*,q*) sortant du BFGS
 
