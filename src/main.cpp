@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
 
 	cout << " BFGS Algorithme " << endl;
 	// Appel de la Méthode L-BFGS
-	Vecteur<double> x = BFGS(Image, x0);
+	Vecteur<double> x = BFGS(Image, x0,"normal");
 
 	// Définition de la hauteur initiale
 	Vecteur<double> h0(Image.n * Image.m, 0);
@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
 	// Matrice etoile_pq(2*Image.n,Image.m,5);
 	cout << " BFGS Hauteur Algorithme " << endl;
 
-	Vecteur<double> h_final = BFGS_hauteur(etoile_pq, h0);
+	Vecteur<double> h_final = BFGS(etoile_pq, h0,"hauteur");
 
 	Matrice result = h_final.toMatrice(Image.n, Image.m);
 

@@ -1,9 +1,32 @@
 #include "lbfgs.hpp"
 #include <cmath>
 
+double fonctionnelle_BFGS(const Matrice& image,const Vecteur<double>& x,string option){
+    if(option=="normal"){
+        return fonctionnelle(image,x);
+    }
+    return fonctionnelle_hauteur(image,x);
+
+}
+Matrice grad_fonctionnelle_BFGS(const Matrice& image,const Vecteur<double> &x,string option){
+
+    if(option=="normal"){
+        return grad_fonctionnelle(image,x);
+    }
+    return grad_fonctionnelle_hauteur(image,x);
+
+}
+double Wolfe_BFGS(const Matrice& Image, Vecteur<double>& x, Vecteur<double>& z, Vecteur<double>& gradient,string option){
+    if(option=="normal"){
+        return Wolfe(Image,x,z,gradient);
+    }
+    return Wolfe_hauteur(Image,x,z,gradient);
+}
+
 // Méthode BFGS
 
-Vecteur<double> BFGS(const Matrice &Image, Vecteur<double> &x)
+
+Vecteur<double> BFGS(const Matrice &Image, Vecteur<double> &x,string option)
 {
     Matrice Identity(x.dim,x.dim, 0);
     Identity.ToIdentity();
@@ -31,7 +54,7 @@ Vecteur<double> BFGS(const Matrice &Image, Vecteur<double> &x)
     {
         // VOIR WIKIPEDIA POUR LE MODÈLE
         // Calcul du gradient de la fonctionnelle
-        Vecteur<double> g_k = toVecteur(grad_fonctionnelle(Image, x));
+        Vecteur<double> g_k = toVecteur(grad_fonctionnelle_BFGS(Image, x,option));
         cout << "Itérations : " << k << endl;
         cout << "oui, norme du gradient : " << g_k.norm() << endl;
         // Test de la condition 
@@ -83,21 +106,21 @@ Vecteur<double> BFGS(const Matrice &Image, Vecteur<double> &x)
         }
         z *= -1; // z est la direction de descente d_k = -H_k*g_k
         // Calcul du pas alpha respectant la condition de Wolfe
-        alpha = Wolfe(Image, x, z, g_k);
+        alpha = Wolfe_BFGS(Image, x, z, g_k,option);
         x_new = x + z * alpha;
-        y[k % m] = toVecteur(grad_fonctionnelle(Image, x_new)) - toVecteur(grad_fonctionnelle(Image, x));
+        y[k % m] = toVecteur(grad_fonctionnelle_BFGS(Image, x,option)) - toVecteur(grad_fonctionnelle_BFGS(Image, x,option));
         s[k % m] = x_new - x;
         x = x_new;
         k++;
     }
-    cout << "Norme du Gradient : " << toVecteur(grad_fonctionnelle(Image, x)).norm() << endl;
+    cout << "Norme du Gradient : " << toVecteur(grad_fonctionnelle_BFGS(Image, x,option)).norm() << endl;
     cout << "L'algorithme n'a pas convergé en " << i_max << " itérations " << endl;
     // detruit tout avant de return
     return x;
 }
 
 // BFGS Hauteur
-
+/*
 Vecteur<double> BFGS_hauteur(const Matrice &Image, Vecteur<double> &x)
 {
 
@@ -191,6 +214,6 @@ Vecteur<double> BFGS_hauteur(const Matrice &Image, Vecteur<double> &x)
     }
     return x;
 }
-
+*/
 
 //
