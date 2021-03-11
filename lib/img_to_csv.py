@@ -30,4 +30,4 @@ def img_to_csv(filename, array):
         writer.writerow([len(list_array),len(list_array[0])])
         writer.writerows(list_array)
    
-img_to_csv("image", img)
+img_to_csv("dragon", img)
