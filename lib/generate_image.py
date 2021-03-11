@@ -18,4 +18,19 @@ def parabole(n):
     return "done!"
 
 
-parabole(64)
+def othmane(n):
+    array = np.zeros([n, n], dtype=np.uint8)
+
+    for i in range(n//4, 3*n//4):
+        for j in range(n//4, 3*n//4):
+            value = 2 * (n/2) ** 2 - (i - n/2)**2 - (j - n/2)**2
+            array[i, j] = value
+    print(array)
+
+    # Use PIL to create an image from the new array of pixels
+    new_image = Image.fromarray(array)
+    new_image.save('othmane.png')
+    return "done!"
+
+
+othmane(64)
