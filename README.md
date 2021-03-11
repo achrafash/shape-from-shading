@@ -27,3 +27,8 @@ g++ src/main.cpp src/conversion_image_matrice.cpp src/matrice.cpp src/vecteur.cp
 
 ## Remarques
 Les images a fort contraste ne convergent pas. En général l'algorithme converge mieux avec un fond blanc.
+
+## Les Limites
+### Problèmes de symétrie
+L'algorithme choisit un peu aléatoirement entre convexité et concavité.
+![Problème de symétrie](symetry_problem.png)
