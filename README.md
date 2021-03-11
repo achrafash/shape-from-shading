@@ -1,5 +1,23 @@
 # Shape from shading
-# Preview
+
+## TODO
+##### Othmane
+- [ ] Enlever le template sur la class Vecteur
+- [ ] Implementer une matrice "sparse de Matlab" diagonale
+- [ ] Commenter le code
+- [ ] Essayer l'option sur BFGS
+
+##### Achraf
+- [ ] Génération d'images ($sin^2$) 
+- [ ] Initialisation bombée de la matrice $h$
+- [ ] Slides pour la soutenance
+- [ ] Génération des résultats et commentaires
+
+##### Karim
+- [ ] Description de la modélisation du problème (lumière, équations, etc)
+- [ ] Méthode d'optimisation (LBFGS, implémentation)
+
+## Preview
 
 ![Masque](mask_shape.png)
 ![Jesus](jesus_shape.png)
