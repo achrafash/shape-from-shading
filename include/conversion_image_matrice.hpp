@@ -1,7 +1,7 @@
 #ifndef __CONVERSION__
 #define __CONVERSION__
 
-#include "matrice.hpp"
+#include "matrice2.hpp"
 #include <fstream>
 #include <string>
 #include<iostream>

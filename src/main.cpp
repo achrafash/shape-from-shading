@@ -1,7 +1,7 @@
 #include <iostream>
-#include "matrice.hpp"
+#include "matrice2.hpp"
 #include "conversion_image_matrice.hpp"
-#include "vecteur.hpp"
+#include "vecteur2.hpp"
 #include "lbfgs.hpp"
 #include "maillage.hpp"
 
@@ -19,24 +19,24 @@ int main(int argc, char *argv[])
 
 	// Appel de la Méthode L-BFGS
 	// Définition de x=(p,q) initiale
-	Vecteur<double> x0(2 * Image.n * Image.m, 0.5);
+	Vecteur x0(2 * Image.n * Image.m, 0.5);
 
 	cout << " BFGS Algorithme " << endl;
 	// Appel de la Méthode L-BFGS
-	Vecteur<double> x = BFGS(Image, x0);
+	Vecteur x = BFGS(Image, x0);
 
 	// Définition de la hauteur initiale
-	Vecteur<double> h0(Image.n * Image.m, 0);
+	Vecteur h0(Image.n * Image.m, 0);
 
 	// Définition de (p*,q*) sortant du BFGS
 
-	Matrice etoile_pq = x.toMatrice(2 * Image.n, Image.m);
+	Matrice etoile_pq = toMatrice(x,2 * Image.n, Image.m);
 	// Matrice etoile_pq(2*Image.n,Image.m,5);
 	cout << " BFGS Hauteur Algorithme " << endl;
 
-	Vecteur<double> h_final = BFGS_hauteur(etoile_pq, h0);
+	Vecteur h_final = BFGS_hauteur(etoile_pq, h0);
 
-	Matrice result = h_final.toMatrice(Image.n, Image.m);
+	Matrice result = toMatrice(h_final,Image.n, Image.m);
 
 	cout << "Fini" << endl;
 	cout << "Génération du maillage... "<< endl; 

@@ -67,41 +67,13 @@ Matrice::Matrice(const Matrice &M)
 	}
 };
 
-Matrice::Matrice(int dim, const string &id)
-{
-	if (id != "Id")
-	{
-		cout << "Cet argument n'est pas pris en compte.\n";
-		exit(1);
-	}
-	n = dim;
-	m = dim;
-	val = new double *[dim];
-	for (int i = 0; i < dim; i++)
-	{
-		val[i] = new double[dim];
-		for (int j = 0; j < dim; j++)
-		{
-			if (i == j)
-			{
-				val[i][j] = 1;
-			}
-			else
-			{
-				val[i][j] = 0;
-			}
-		}
-	}
-};
 
 // Destructeur
 
 Matrice::~Matrice()
 {
-	if (val != nullptr)
-	{
-		for (int i = 0; i < n; i++)
-		{
+	if (val != nullptr){
+		for (int i = 0; i < n; i++){
 			delete[] val[i];
 			val[i] = nullptr;
 		}
@@ -196,7 +168,7 @@ Matrice Matrice::operator*(const Matrice &M) const
 	}
 	return tmp;
 };
-
+/*
 Vecteur<double> Matrice::operator*(const Vecteur<double> &V) const
 {
 	if (m != V.dim)
@@ -214,7 +186,7 @@ Vecteur<double> Matrice::operator*(const Vecteur<double> &V) const
 	}
 	return temp;
 };
-
+*/
 Matrice Matrice::operator*(const double nb)
 {
 	Matrice tmp(n, m);
@@ -374,8 +346,45 @@ Matrice operator*(const double nb, const Matrice &M)
 	return M * nb;
 }
 
-//Matrices carrées diagonales
+Matrice Matrice::ToIdentity(){
 
+	if(n!=m){
+		cout << "Matrice non carrée, on ne peut pas créer une matrice identité" << endl;
+		exit(0);
+	}
+	for(int i=0;i<n;i++){
+		for(int j=0;j<n;j++){
+			if(i==j){
+				val[i][j] = 1;
+			} 
+			else{
+				val[i][j] = 0;
+			}
+		}
+	}
+	return *this;
+
+}
+
+Vecteur<double> operator*(const Matrice &H,const Vecteur<double> &V){
+	int n = H.n;
+	if (n != V.dim)
+	{
+		cout << "Les dimensions ne correspondent pas. \n";
+		exit(1);
+	}
+	Vecteur<double> temp(n);
+	for (int i = 0; i < n; i++){
+		for(int j=0;j<n;j++){
+			temp.val[i] += H.val[i][j] * V.val[j];
+		}
+	}
+	return temp;
+	
+}
+
+//Matrices carrées diagonales
+/*
 Matrice_diag::Matrice_diag()
 {
 	n = 0;
@@ -489,3 +498,5 @@ void Matrice_diag::clear()
 		val = nullptr;
 	}
 }
+
+*/
