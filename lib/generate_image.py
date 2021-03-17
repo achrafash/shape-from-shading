@@ -55,7 +55,7 @@ def cubic_difference(n):
 
     for i in range(n):
         for j in range(n):
-            image[i, j] = int(((i/n)**3 - (j/n)**3)*255/2)
+            image[i, j] = int(((i/n)**3 + (j/n)**3)*255/2)
 
     new_image = Image.fromarray(image)
     new_image.save("cubic_difference.png")
@@ -107,5 +107,5 @@ def plot_3d_surface(array):
 
 
 if __name__ == "__main__":
-    array = polaire_sin(120)
+    array = double_sin(120)
     plot_3d_surface(array)
