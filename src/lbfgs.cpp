@@ -4,10 +4,16 @@
 // Méthode BFGS
 
 Vecteur BFGS(const Matrice &Image, Vecteur &x)
-{
+{   
+    /*
     Matrice Identity(x.dim,x.dim, 0);
     Identity.ToIdentity();
-    cout << "oui" << endl;
+    */
+    Sparse Identity(x.dim,x.dim);
+    //cout << "oui1" <<endl;
+    Identity.Toidentity();
+
+    //cout << "oui4" << endl;
     Vecteur x_new = x;
     int n_ligne = Image.n;
     int m_colonne = Image.m;
@@ -70,7 +76,7 @@ Vecteur BFGS(const Matrice &Image, Vecteur &x)
             // mise à jour de Gamma
             gamma_k = (s[(k - 1) % m] | y[(k - 1) % m]) / (y[(k - 1) % m] | y[(k - 1) % m]);
         }
-        Matrice H_k0 = gamma_k * Identity;
+        Sparse H_k0 = gamma_k * Identity;
         Vecteur z = H_k0 * q;
         // cout << "oui" << endl;
         if(k>0){
@@ -140,8 +146,9 @@ Vecteur BFGS(const Matrice &Image, Vecteur &x)
 Vecteur BFGS_hauteur(const Matrice &Image, Vecteur &x)
 {
 
-    Matrice Identity(x.dim,x.dim, 0);
-    Identity.ToIdentity();
+    Sparse Identity(x.dim,x.dim);
+    //cout << "oui1" <<endl;
+    Identity.Toidentity();
     Vecteur x_new = x;
     int n_ligne = Image.n;
     int m_colonne = Image.m;
@@ -211,7 +218,7 @@ Vecteur BFGS_hauteur(const Matrice &Image, Vecteur &x)
             gamma_k = (s[(k - 1) % m] | y[(k - 1) % m]) / (y[(k - 1) % m] | y[(k - 1) % m]);
         }
         // cout << "Gamma_k" << gamma_k <<endl;
-        Matrice H_k0 = gamma_k * Identity;
+        Sparse H_k0 = gamma_k * Identity;
         Vecteur z = H_k0 * q;
         // if(k==0){cout << z;}
         if(k>0){

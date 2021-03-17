@@ -19,7 +19,7 @@ class Matrice:public vector<Vecteur>{
 	~Matrice();
 
 
-	Matrice ToIdentity();
+	virtual Matrice ToIdentity();
 	// Opérateurs
 
 	Matrice &operator=(const Matrice &M); // copie
@@ -54,4 +54,21 @@ Vecteur operator*(const Matrice &H,const Vecteur &V);
 
 Matrice toMatrice(const Vecteur& v, const int i, const int j); // Transformation en matrice
 
+struct Coord{
+	int i;
+	int j;
+};
+
+class Sparse:public Matrice{
+	public:
+	vector<vector<Coord>> Coord_non_nul;	
+	Sparse(int n,int m);
+	Sparse& operator=(const Sparse& S);
+	void Toidentity();
+	~Sparse();
+};
+
+Sparse operator*(const Sparse& S,const double a);
+Sparse operator*(const double a,const Sparse& S);
+Vecteur operator*(const Sparse& S,const Vecteur& V);
 #endif

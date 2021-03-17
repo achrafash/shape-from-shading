@@ -49,6 +49,7 @@ Vecteur::Vecteur(const Vecteur &V){
 
 Vecteur::~Vecteur(){
     if (val != nullptr){
+        // cout << "dim" << dim << endl;
         delete[] val;
         val = nullptr;
     }

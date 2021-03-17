@@ -338,3 +338,103 @@ Matrice toMatrice(const Vecteur& v,const int i, const int j){
     }
     return e;
 }
+
+// SPARSE
+
+
+// 
+
+Sparse::Sparse(int n_l,int n_c):Matrice(n_l,n_c){
+
+	n = n_l;
+	m = n_c;
+
+	(*this).clear();
+	(*this).resize(n);
+	for(int i=0;i<n;i++){
+		(*this)[i] = Vecteur();
+	}
+	Coord_non_nul.resize(n);
+}
+
+Sparse& Sparse::operator=(const Sparse& S){
+
+	n = S.n;
+	m = S.m;
+
+	(*this).clear();
+	(*this).resize(n);
+	for(int i=0;i<n;i++){
+		(*this)[i] = S[i];
+	}
+	Coord_non_nul.resize(n);
+	for(int i=0;i<n;i++){
+		Coord_non_nul[i].resize(S.Coord_non_nul[i].size());
+		for(int j=0;j<Coord_non_nul[i].size();j++){
+			Coord_non_nul[i][j] = S.Coord_non_nul[i][j];
+		}
+	}
+}	
+
+Sparse operator*(const Sparse& S,const double a ){
+	Sparse S2 = S;
+	for(int i=0;i<S.n;i++){
+		for(int j=0;j<S[i].dim;j++){
+			S2[i].val[j] = a *S[i].val[j];
+		}
+	}
+	return S2;
+
+}
+
+Sparse operator*(const double a,const Sparse& S){
+
+	return S*a;
+
+}
+
+Vecteur operator*(const Sparse& S,const Vecteur& V){
+
+	Vecteur e(S.n,0);
+	for(int i=0;i<S.n;i++){
+		for(int j=0;j<S[i].dim;j++){
+			e.val[i]+=S[i][j]*V[S.Coord_non_nul[i][j].j];
+		}
+	}
+	return e;
+
+}
+
+void Sparse::Toidentity(){
+	Vecteur diagonale(1,1);
+	Coord indice = {0,0};
+	for(int i=0;i<n;i++){
+		//cout << "oui" << endl;
+		(*this)[i] = Vecteur (1,1);
+		indice.i = i;
+		indice.j = i;
+		Coord_non_nul[i].push_back(indice);
+
+	}
+	//cout << "première ligne" << (*this)[0] << endl;
+}
+
+Sparse::~Sparse(){
+	//cout << (*this)[0] << endl;
+	//cout << (*this)[1] << endl;
+	//cout << (*this)[2] << endl;
+
+	//cout << "clear" << endl;
+	Coord_non_nul.clear();
+	//cout << "clear" << endl;
+	if ((*this).size()!=0){
+		for (int i = 0; i < n; i++){
+			//cout << "clear" << endl;
+			//cout << "dim" << (*this)[i].dim << endl;
+			(*this)[i].~Vecteur();
+		}
+		n = 0;
+		m = 0;
+		(*this).clear();
+	}
+}

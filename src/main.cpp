@@ -9,7 +9,14 @@
 
 int main(int argc, char *argv[])
 {
-
+	/*
+	Sparse i(10,10);
+	cout << "oui" <<endl;
+	Vecteur V(10,2);
+	i.Toidentity();
+	Vecteur result = i*V;
+	cout << "result" << result << endl;
+	*/
 	// On charge une image, et converti en fichier .csv et on crée une matrice image 
 	// On la remplit avec les niveaux de gris de l'image initiale.
 	// Done by achraf
