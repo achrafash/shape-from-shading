@@ -9,16 +9,16 @@
 
 using namespace std;
 
-// Définition des précisions 
+// Définition des précisions
 
-const double epsilon_1 = 200;
+const double epsilon_1 = 50;
 const double epsilon_2 = 10e-3;
 
 // Définition du nombres d'itérations maximales du L-BFGS
 
 const int i_max = 10000;
 
-// Définition des fonctions 
+// Définition des fonctions
 
-Vecteur BFGS(const Matrice& Image,Vecteur& x);
-Vecteur BFGS_hauteur(const Matrice& Image,Vecteur& x);
+Vecteur BFGS(const Matrice &Image, Vecteur &x);
+Vecteur BFGS_hauteur(const Matrice &Image, Vecteur &x);
