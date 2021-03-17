@@ -1,13 +1,13 @@
 #include "vecteur.hpp"
-
+#include <cmath>
 // _______________________________________________DÉFINITION DE LA CLASSE VECTEUR_______________________________________________
 
 // ________________________________________________________CONSTRUCTEURS_________________________________________________________________
 
 Vecteur::Vecteur() : dim(0), val(nullptr){};
 
-
-Vecteur::Vecteur(int d, double v){
+Vecteur::Vecteur(int d, double v)
+{
     dim = d;
     val = new double[dim];
     for (int i = 0; i < dim; i++)
@@ -16,11 +16,12 @@ Vecteur::Vecteur(int d, double v){
     }
 };
 
-
-Vecteur::Vecteur(const Vecteur &V){
+Vecteur::Vecteur(const Vecteur &V)
+{
     dim = V.dim;
     val = nullptr;
-    if(dim<=0) return;
+    if (dim <= 0)
+        return;
     val = new double[dim];
     for (int i = 0; i < dim; i++)
     {
@@ -30,17 +31,20 @@ Vecteur::Vecteur(const Vecteur &V){
 
 //Destructeur
 
-Vecteur::~Vecteur(){
-    if (val != nullptr){
+Vecteur::~Vecteur()
+{
+    if (val != nullptr)
+    {
         // cout << "dim" << dim << endl;
         delete[] val;
         val = nullptr;
     }
 };
 
-
-void Vecteur::clear(){
-    if (val != nullptr){
+void Vecteur::clear()
+{
+    if (val != nullptr)
+    {
         // cout << "dimension : "<< dim << endl;
         delete[] val;
         // cout << "cleared" <<endl;
@@ -50,7 +54,8 @@ void Vecteur::clear(){
 
 // ___________________INITIALISATION_____________
 
-void Vecteur::init(int d, double x ){
+void Vecteur::init(int d, double x)
+{
     dim = d;
     val = new double[dim];
     for (int i = 0; i < dim; i++)
@@ -59,77 +64,110 @@ void Vecteur::init(int d, double x ){
     }
 }
 
+void Vecteur::initialize(int n)
+{
+    int eps = 10;
+    double R = (n - 2 * eps) / 2;
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            if (i > eps && i < n - eps && j > eps && j < n - eps)
+            {
+                double r = (i - n / 2) * (i - n / 2) + (j - n / 2) * (j - n / 2);
+                (*this)[j + n * i] = sqrt(R * R - r * r);
+            }
+            else
+            {
+                (*this)[j + n * i] = 0;
+            }
+        }
+    }
+}
+
 //_______________OPÉRATEURS INTERNES_____________
 
-Vecteur &Vecteur::operator=(const Vecteur &V){
+Vecteur &Vecteur::operator=(const Vecteur &V)
+{
     dim = V.dim;
     clear();
     val = new double[dim];
-    for (int i = 0; i < dim; i++){
+    for (int i = 0; i < dim; i++)
+    {
         val[i] = V.val[i];
     }
     return *this;
 };
 
-
-Vecteur &Vecteur::operator*=(const double a){
-    for (int i = 0; i < dim; i++){
+Vecteur &Vecteur::operator*=(const double a)
+{
+    for (int i = 0; i < dim; i++)
+    {
         val[i] *= a;
     }
     return *this;
 };
 
-
-Vecteur &Vecteur::operator/=(const double a){
-    if (a == 0){
+Vecteur &Vecteur::operator/=(const double a)
+{
+    if (a == 0)
+    {
         cout << "DIVISION BY ZERO : FUNCTION OPERATOR /= ";
         exit(0);
     }
-    for (int i = 0; i < dim; i++){
+    for (int i = 0; i < dim; i++)
+    {
         val[i] /= a;
     }
     return *this;
 };
 
-
-double &Vecteur::operator()(int i) const{
+double &Vecteur::operator()(int i) const
+{
     return val[i - 1];
 };
 
-
-Vecteur Vecteur::operator()(int i, int j) const{
-    if (i >= j){
+Vecteur Vecteur::operator()(int i, int j) const
+{
+    if (i >= j)
+    {
         cout << "ERREUR EXTRACTION VECTEUR \n";
         exit(0);
     }
     int dim = j - i + 1;
     Vecteur temp(dim);
-    for (int k = 0; k < dim; k++){
+    for (int k = 0; k < dim; k++)
+    {
         temp.val[k] = val[i + k];
     }
     return temp;
 }
 
-double& Vecteur::operator[](int i) const{
+double &Vecteur::operator[](int i) const
+{
 
     return val[i];
-
 }
 
-Vecteur Vecteur::operator+(const Vecteur &V){
-    if (V.dim != dim){
+Vecteur Vecteur::operator+(const Vecteur &V)
+{
+    if (V.dim != dim)
+    {
         cout << "ERREUR DIMENSION \n";
         exit(0);
     }
     Vecteur e = *this;
-    for (int i = 0; i < V.dim; i++){
+    for (int i = 0; i < V.dim; i++)
+    {
         e.val[i] += V.val[i];
     }
     return e;
 };
 
-Vecteur Vecteur::operator-(const Vecteur &V){
-    if (V.dim != dim){
+Vecteur Vecteur::operator-(const Vecteur &V)
+{
+    if (V.dim != dim)
+    {
         cout << "ERREUR DIMENSION \n";
         exit(0);
     }
@@ -141,8 +179,8 @@ Vecteur Vecteur::operator-(const Vecteur &V){
     return e;
 };
 
-
-Vecteur Vecteur::operator*(const double a){
+Vecteur Vecteur::operator*(const double a)
+{
     Vecteur V = *this;
     for (int i = 0; i < dim; i++)
     {
@@ -151,12 +189,13 @@ Vecteur Vecteur::operator*(const double a){
     return V;
 };
 
-
 //____________________________OPÉRATEURS EXTERNES_______________________________
 
-double Vecteur::operator|(const Vecteur &V){
+double Vecteur::operator|(const Vecteur &V)
+{
     double result = 0;
-    for (int i = 0; i < dim; i++){
+    for (int i = 0; i < dim; i++)
+    {
         result += val[i] * V.val[i];
     }
     return result;
@@ -164,9 +203,11 @@ double Vecteur::operator|(const Vecteur &V){
 
 //______________________________OPÉRATEUR D'AFFICHAGE__________________________________
 
-ostream &operator<<(ostream &out, const Vecteur &V){
+ostream &operator<<(ostream &out, const Vecteur &V)
+{
     out << "( ";
-    for (int i = 0; i < V.dim; i++){
+    for (int i = 0; i < V.dim; i++)
+    {
         out << V.val[i] << " ";
     }
     out << ")\n";
@@ -175,31 +216,33 @@ ostream &operator<<(ostream &out, const Vecteur &V){
 
 // ______________________NORME____________________
 
-double Vecteur::norm(){
-    double result = (*this)|(*this);
+double Vecteur::norm()
+{
+    double result = (*this) | (*this);
     return sqrt(result);
 };
 
-Vecteur operator*(const double a,const Vecteur& V){
+Vecteur operator*(const double a, const Vecteur &V)
+{
 
     Vecteur e = V;
-    e*= a;
+    e *= a;
     return e;
-
 }
 
-
-Vecteur operator*(const Vecteur& V,const double a){
-    return a*V;
+Vecteur operator*(const Vecteur &V, const double a)
+{
+    return a * V;
 }
 
-// moyenne pour initialiser la hauteur 
+// moyenne pour initialiser la hauteur
 
-double mean(Vecteur& v)
+double mean(Vecteur &v)
 {
     double m = v(1);
-    for(int i=2;i<=v.dim;i++){
-        m+=v(i);
+    for (int i = 2; i <= v.dim; i++)
+    {
+        m += v(i);
     }
-    return m/v.dim;
-}; 
+    return m / v.dim;
+};

@@ -4,11 +4,11 @@
 #include "matrice.hpp"
 #include "vecteur.hpp"
 
-// Définition des facteurs de pénalisation 
+// Définition des facteurs de pénalisation
 
 const double delta = 1;
-const double lambda_int = 1 ;
-const double lambda_csmo = 1;
+const double lambda_int = .01;
+const double lambda_csmo = .01;
 
 // Définition des constantes de Wolfe (VOIR SYLLABUS OPT202 pour le choix des constantes )
 
@@ -19,11 +19,11 @@ const double w2 = 0.99;
 
 const int i_max_Wolfe = 20;
 
-double Wolfe(const Matrice& Image, Vecteur& x, Vecteur& z, Vecteur& gradient);
-double Wolfe_hauteur(const Matrice& Image, Vecteur& x, Vecteur& z, Vecteur& gradient);
-Matrice grad_fonctionnelle(const Matrice& image,const Vecteur& x);
-double fonctionnelle(const Matrice& image,const Vecteur& x);
-Matrice grad_fonctionnelle_hauteur(const Matrice& image,const Vecteur &x);
+double Wolfe(const Matrice &Image, Vecteur &x, Vecteur &z, Vecteur &gradient);
+double Wolfe_hauteur(const Matrice &Image, Vecteur &x, Vecteur &z, Vecteur &gradient);
+Matrice grad_fonctionnelle(const Matrice &image, const Vecteur &x);
+double fonctionnelle(const Matrice &image, const Vecteur &x);
+Matrice grad_fonctionnelle_hauteur(const Matrice &image, const Vecteur &x);
 double fonctionnelle_hauteur(const Matrice &x, const Vecteur &h);
 
 #endif
