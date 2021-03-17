@@ -1,4 +1,5 @@
 .vscode
+.vs
 .DS_Store
 main
 main.exe
