@@ -1,25 +1,8 @@
-#include <cstdlib>
-#include <cmath>
 #include "vecteur.hpp"
 
-//utilitaire de messages d'erreur
-void stop(const char * msg)
-{
-  cout<<"ERREUR classe vecteur, " << msg;
-  exit(-1);
-}
+// _______________________________________________DÉFINITION DE LA CLASSE VECTEUR_______________________________________________
 
-void test_dim(int d1, int d2, const char * org)
-{
-  if(d1==d2)  return;
-  cout<<org<<" ("<<d1<<","<<d2<<") dimensions incompatibles";
-  exit(-1);
-}
-
-
-//Definition des methodes
-
-//Constructeurs
+// ________________________________________________________CONSTRUCTEURS_________________________________________________________________
 
 Vecteur::Vecteur() : dim(0), val(nullptr){};
 
@@ -49,6 +32,7 @@ Vecteur::Vecteur(const Vecteur &V){
 
 Vecteur::~Vecteur(){
     if (val != nullptr){
+        // cout << "dim" << dim << endl;
         delete[] val;
         val = nullptr;
     }
@@ -64,7 +48,7 @@ void Vecteur::clear(){
     }
 }
 
-// initialisation 
+// ___________________INITIALISATION_____________
 
 void Vecteur::init(int d, double x ){
     dim = d;
@@ -75,7 +59,7 @@ void Vecteur::init(int d, double x ){
     }
 }
 
-//Opérations internes
+//_______________OPÉRATEURS INTERNES_____________
 
 Vecteur &Vecteur::operator=(const Vecteur &V){
     dim = V.dim;
@@ -98,7 +82,7 @@ Vecteur &Vecteur::operator*=(const double a){
 
 Vecteur &Vecteur::operator/=(const double a){
     if (a == 0){
-        cout << "DIVISION BY ZERO : function operator/= ";
+        cout << "DIVISION BY ZERO : FUNCTION OPERATOR /= ";
         exit(0);
     }
     for (int i = 0; i < dim; i++){
@@ -126,8 +110,14 @@ Vecteur Vecteur::operator()(int i, int j) const{
     return temp;
 }
 
+double& Vecteur::operator[](int i) const{
+
+    return val[i];
+
+}
+
 Vecteur Vecteur::operator+(const Vecteur &V){
-    if (V.dim != this->dim){
+    if (V.dim != dim){
         cout << "ERREUR DIMENSION \n";
         exit(0);
     }
@@ -139,7 +129,7 @@ Vecteur Vecteur::operator+(const Vecteur &V){
 };
 
 Vecteur Vecteur::operator-(const Vecteur &V){
-    if (V.dim != this->dim){
+    if (V.dim != dim){
         cout << "ERREUR DIMENSION \n";
         exit(0);
     }
@@ -152,7 +142,7 @@ Vecteur Vecteur::operator-(const Vecteur &V){
 };
 
 
-Vecteur Vecteur::operator*(const T a){
+Vecteur Vecteur::operator*(const double a){
     Vecteur V = *this;
     for (int i = 0; i < dim; i++)
     {
@@ -162,22 +152,7 @@ Vecteur Vecteur::operator*(const T a){
 };
 
 
-
-Matrice Vecteur::toMatrice(const int i, const int j)const{
-    if (i * j != dim){
-        cout << "ERREUR DIMENSION : function ToMatrice \n";
-        exit(0);
-    }
-    Matrice e(i, j);
-    for (int k = 0; k < i; k++){
-        for (int l = 0; l < j; l++){
-            e.val[k][l] = val[l+k*j];
-        }
-    }
-    return e;
-}
-
-//Produit scalaire
+//____________________________OPÉRATEURS EXTERNES_______________________________
 
 double Vecteur::operator|(const Vecteur &V){
     double result = 0;
@@ -187,7 +162,7 @@ double Vecteur::operator|(const Vecteur &V){
     return result;
 }
 
-//Opérateur print
+//______________________________OPÉRATEUR D'AFFICHAGE__________________________________
 
 ostream &operator<<(ostream &out, const Vecteur &V){
     out << "( ";
@@ -198,7 +173,7 @@ ostream &operator<<(ostream &out, const Vecteur &V){
     return out;
 };
 
-//Norme
+// ______________________NORME____________________
 
 double Vecteur::norm(){
     double result = (*this)|(*this);
@@ -227,4 +202,4 @@ double mean(Vecteur& v)
         m+=v(i);
     }
     return m/v.dim;
-};
+}; 

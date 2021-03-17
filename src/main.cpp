@@ -1,7 +1,7 @@
 #include <iostream>
-#include "matrice2.hpp"
+#include "matrice.hpp"
 #include "conversion_image_matrice.hpp"
-#include "vecteur2.hpp"
+#include "vecteur.hpp"
 #include "lbfgs.hpp"
 #include "maillage.hpp"
 
@@ -9,7 +9,7 @@
 
 int main(int argc, char *argv[])
 {
-	/*
+	/* Test matrice Sparse 
 	Sparse i(10,10);
 	cout << "oui" <<endl;
 	Vecteur V(10,2);
@@ -17,12 +17,10 @@ int main(int argc, char *argv[])
 	Vecteur result = i*V;
 	cout << "result" << result << endl;
 	*/
-	// On charge une image, et converti en fichier .csv et on crée une matrice image 
+	// On charge une image, et on la converti en fichier .csv et on crée une matrice image 
 	// On la remplit avec les niveaux de gris de l'image initiale.
-	// Done by achraf
 
 	Matrice Image = image_to_matrice(argv[1]);
-	// Image.print();
 
 	// Appel de la Méthode L-BFGS
 	// Définition de x=(p,q) initiale
