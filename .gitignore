@@ -1,8 +1,9 @@
 .vscode
+.vs
 .DS_Store
 main
 main.exe
-
+results/
 *.mesh
 *.png
 *.csv
