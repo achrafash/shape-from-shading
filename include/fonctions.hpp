@@ -1,5 +1,8 @@
-#include "matrice2.hpp"
-#include "vecteur2.hpp"
+#ifndef __FONCTION__
+#define __FONCTION__
+
+#include "matrice.hpp"
+#include "vecteur.hpp"
 
 // Définition des facteurs de pénalisation 
 
@@ -23,3 +26,4 @@ double fonctionnelle(const Matrice& image,const Vecteur& x);
 Matrice grad_fonctionnelle_hauteur(const Matrice& image,const Vecteur &x);
 double fonctionnelle_hauteur(const Matrice &x, const Vecteur &h);
 
+#endif

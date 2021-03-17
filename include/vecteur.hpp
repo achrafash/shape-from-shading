@@ -6,7 +6,6 @@
 using namespace std;
 
 // Définition de notre classe Vecteur avec un template
-
 class Vecteur{
   public:
     int dim; // Dimensions
@@ -31,18 +30,18 @@ class Vecteur{
     Vecteur operator+(const Vecteur &V); // opérateur +V
     Vecteur operator-(const Vecteur &V); // opérateur +V
     Vecteur operator*(const double a); // opérateur *a
-    Matrice toMatrice(const int i, const int j) const; // Transformation en matrice
     double operator*(const Vecteur &);
     double operator|(const Vecteur &V); // produit scalaire
-    double &operator()(int) const; // accès lecture et écriture
-    Vecteur operator()(int, int) const; 
+    double &operator()(int) const; // accès lecture et écriture avec les indices allant de 1 à dim
+    double &operator[](int) const; // accèe lecture et écriture avec les indices allant de 0 à dim-1
+    Vecteur operator()(int, int) const;  
     //Opérateur print
     friend ostream &operator<<(ostream &, const Vecteur &); // affichage
     //Norme
     double norm(); // calcul la norme d'un vecteur 
 };
 
-
-
+Vecteur operator*(const Vecteur& v,const double a); // opérateur v*a
+Vecteur operator*(const double a,const Vecteur& v); // opérateur a*v
 
 #endif
